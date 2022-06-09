@@ -1,5 +1,5 @@
-from crypt import methods
-from flask import request,jsonify
+# from crypt import methods
+from flask import Flask, request,jsonify
 from werkzeug.security import generate_password_hash,check_password_hash
 import jwt
 from datetime import datetime, timedelta
@@ -9,7 +9,11 @@ import models
 from init import db,app
 from utilities import token_required
 from sqlalchemy import delete
+from flask_restful import Api, Resource, reqparse
+from flask_cors import CORS #comment this on deployment
 
+# app = Flask(__name__, static_url_path='', static_folder='frontend/build')
+CORS(app) #comment this on deployment
 @app.route('/register',methods=['POST'])
 def create_user():
     data = request.get_json()
@@ -172,27 +176,9 @@ def get_paginated_list(results, url, start, limit,per_page):
     obj['results'] = results[(start - 1):(start - 1 + limit)]
     return obj
 
-@app.route('/activities/<int:start>/<int:limit>',methods=['GET'])
-def get_activities(start,limit):
-    podatci = request.get_json()
-    output = []
-    aktivnosti = models.Aktivnost.query.filter_by(id_korisnika = podatci['id'])
-    korisnici = models.Korisnik.query.filter_by(id = podatci['id'])
-    for korisnik in korisnici:
-        for aktivnost in aktivnosti:
-            output.append({
-                'ime': korisnik.ime,
-                'id_korisnika' : aktivnost.id_korisnika,
-                'vrijeme' : aktivnost.vrijeme,
-                'trajanje' : aktivnost.trajanje,
-                'ruta' : aktivnost.ruta,
-                })
-        if(start>len(output)):
-            return jsonify({"Poruka":"Ne postoji vise unosa"})
-    return jsonify({"Output":get_paginated_list(output,"/activites",start,limit,per_page=5)})
-
 @app.route('/home')
 def homepage():
     return jsonify({"data":"data"})
 if __name__ =="__main__":
     app.run(debug = True,host='localhost',threaded=True)
+    
