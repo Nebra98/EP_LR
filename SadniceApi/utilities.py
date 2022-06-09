@@ -17,12 +17,8 @@ def token_required(f):
         try:
             data = jwt.decode(token,app.config['SECRET_KEY'],"HS256")
             trenutni_korisnik = models.Korisnik.query.filter_by(id=data['id']).first()
+            korisnicko_ime = trenutni_korisnik.korisnicko_ime
         except:
             return jsonify({"poruka":"Nepravilan token"}),401
-        return f(trenutni_korisnik,*args,**kwargs)
+        return f(korisnicko_ime,*args,**kwargs)
     return decorated
-def fillTable(route,id,f):
-    novaAktivnost = models.Aktivnost(id_korisnika = id, vrijeme=datetime.now(),trajanje = f,ruta = route)
-    db.session.add(novaAktivnost)
-    db.session.commit()
-    return jsonify({"Poruka":"Tablica ispunjena"})

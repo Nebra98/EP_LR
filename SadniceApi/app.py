@@ -1,3 +1,4 @@
+from crypt import methods
 from flask import request,jsonify
 from werkzeug.security import generate_password_hash,check_password_hash
 import jwt
@@ -6,7 +7,8 @@ from functools import wraps
 import time
 import models 
 from init import db,app
-from utilities import token_required,fillTable
+from utilities import token_required
+from sqlalchemy import delete
 
 @app.route('/register',methods=['POST'])
 def create_user():
@@ -16,92 +18,110 @@ def create_user():
     db.session.add(novi_korisnik)
     db.session.commit()
     return jsonify({'poruka':'Korisnik uspjesno kreiran'})
-@app.route('/user',methods=['DELETE'])
+@app.route('/user',methods=['DELETE','UPDATE'])
 @token_required
-def delete_user(trenutni_korisnik):
-    start_time = time.time()
-
-    if not trenutni_korisnik or not trenutni_korisnik.status:
-        end_time = time.time()
-        fillTable("/user",trenutni_korisnik.id,end_time-start_time)     
-        return jsonify({"Poruka":"Pogreska","trajanje":end_time-start_time})
-
-    db.session.query(models.Korisnik).filter(
-        models.Korisnik.ime == trenutni_korisnik.ime).update(
-        {models.Korisnik.status:False},synchronize_session=False)           
+def delete_user(korisnicko_ime):
+    if not korisnicko_ime:
+        return jsonify({"Poruka":"Greska"})
+    models.Korisnik.query.filter(models.Korisnik.korisnicko_ime==korisnicko_ime).delete()    
     db.session.commit()   
-    end_time = time.time()
-    fillTable("/user",trenutni_korisnik.id,end_time-start_time)     
-    return jsonify({"Poruka":trenutni_korisnik.ime,"Time":str(end_time-start_time)})
+    return jsonify({"Poruka":korisnicko_ime})
 
 @app.route('/login',methods=['GET'])
 def login():
-    start_time = time.time()
     auth = request.authorization
-    
     korisnik = models.Korisnik.query.filter_by(korisnicko_ime = auth.username).first()
-    if not korisnik.status:
-        end_time = time.time()
-        fillTable("/login",korisnik.id,end_time - start_time)
-
-        return jsonify({"poruka":"Status korisnika je 0, login nije moguc"})
     if not korisnik:
-        end_time = time.time()
-        fillTable("/login",korisnik.id,end_time - start_time)
-
         return jsonify({"Poruka":"Pogreska"})
     if check_password_hash(korisnik.lozinka, auth.password):
         token = jwt.encode({
             'id': korisnik.id, 
             'exp':datetime.utcnow() + timedelta(hours=10)},
             app.config['SECRET_KEY'],algorithm="HS256"),
-        end_time = time.time()
-        fillTable("/login",korisnik.id,end_time - start_time)
-
         return jsonify({"token": token})
     
-@app.route('/index',methods=['GET'])
-def get_users():
-    output = []
-    uvjet = request.get_json()
-    korisnici = None
-    korisnik = None
-    if uvjet==None:
-        korisnici = models.Korisnik.query.all()
-    elif uvjet['filter'] =="ime":
-        korisnici = models.Korisnik.query.filter_by(ime = uvjet['search'])
-    elif uvjet['filter'] == "prezime":
-        korisnici = models.Korisnik.query.filter_by(prezime = uvjet['search'])
+@app.route('/sadnica',methods=['GET','POST','DELETE','UPDATE'])
+def crud_sadnice():
+    sadnica = request.get_json()
+    if request.method == 'GET':
+        sadnice = models.Sadnica.query.all()
+        output = []
 
-    elif uvjet['filter'] == "email":
-        korisnici = models.Korisnik.query.filter_by(email = uvjet['search'])
-   
-    elif uvjet['filter'] == "korisnicko_ime":
-        korisnici = models.Korisnik.query.filter_by(korisnicko_ime = uvjet['search'])
-    elif uvjet['filter'] == "status":
-        korisnici = models.Korisnik.query.filter_by(status = uvjet['search'])
-    
-    for korisnik in korisnici:
-        data = {
-            "ime":korisnik.ime,
-            "prezime":korisnik.prezime,
-            "email":korisnik.email,
-            "korisnicko_ime":korisnik.korisnicko_ime,
-            "lozinka":korisnik.lozinka,
-            "status":korisnik.status
+        for sadnica in sadnice:
+            data = {
+                "id":sadnica.id,
+                "naziv":sadnica.naziv,
+                "slika":sadnica.slika,
+                "tip":sadnica.tip,
+                "opis":sadnica.opis,
                 }
-       
-        output.append(data)
-   
-    return jsonify({'users' : output})
+            output.append(data)
+        return jsonify({'Sadnice' : output})
 
-@app.route('/user',methods=['POST'])
+    elif request.method == 'POST':
+        nova_sadnica = models.Sadnica(naziv=sadnica["naziv"],slika=sadnica["slika"],tip=sadnica["tip"],opis=sadnica["opis"])
+        db.session.add(nova_sadnica)
+        db.session.commit()        
+        return jsonify({"Poruka":"Sadnica dodana"})
 
+    elif request.method == 'DELETE':
+        models.Korisnik.query.filter(models.Sadnica.naziv==sadnica["naziv"]).delete()    
+        db.session.commit() 
+        return jsonify({"Poruka":"Brisanje uspjesno"})
+
+    elif request.method == 'UPDATE':
+        db.session.query(models.Sadnica).filter(models.Sadnica.naziv==sadnica["naziv"]).update({
+            models.Sadnica.naziv : sadnica["naziv"],
+            models.Sadnica.opis:sadnica["opis"],
+            models.Sadnica.slika:sadnica["slika"],
+            models.Sadnica.tip:sadnica["tip"]
+        })    
+        db.session.commit()
+        return jsonify({"Poruka":"Azuriranje uspjesno"})
+    return jsonify({"Poruka":"Greska"})
+
+
+@app.route('/usluga',methods=['GET','POST','DELETE','UPDATE'])
+def crud_usluga():
+    sadnica = request.get_json()
+    if request.method == 'GET':
+        usluge = models.Usluga.query.all()
+        output = []
+        
+        for usluga in usluge:
+            data = {
+                "id":usluga.id,
+                "naziv":sadnica.naziv,
+                "slika":sadnica.slika,
+                "opis":sadnica.opis,
+                }
+            output.append(data)
+        return jsonify({'Sadnice' : output})
+
+    elif request.method == 'POST':
+        nova_sadnica = models.Sadnica(naziv=sadnica["naziv"],slika=sadnica["slika"],opis=sadnica["opis"])
+        db.session.add(nova_sadnica)
+        db.session.commit()        
+        return jsonify({"Poruka":"Sadnica dodana"})
+
+    elif request.method == 'DELETE':
+        models.Korisnik.query.filter(models.Sadnica.naziv==sadnica["naziv"]).delete()    
+        db.session.commit() 
+        return jsonify({"Poruka":"Brisanje uspjesno"})
+
+    elif request.method == 'UPDATE':
+        db.session.query(models.Sadnica).filter(models.Sadnica.naziv==sadnica["naziv"]).update({
+            models.Sadnica.naziv : sadnica["naziv"],
+            models.Sadnica.opis:sadnica["opis"],
+            models.Sadnica.slika:sadnica["slika"],
+        })    
+        db.session.commit()
+        return jsonify({"Poruka":"Azuriranje uspjesno"})
+    return jsonify({"Poruka":"Greska"})
 
 
 @app.route('/user',methods=['PUT'])
 def update_user():
-    start_time = time.time()
 
     data = request.get_json()
     trenutniKorisnik = models.Korisnik.query.filter_by(ime = data['ime']).first()
@@ -111,18 +131,12 @@ def update_user():
         if(data['nova_lozinka'] == data['potvrdi_novu']):
             db.session.query(models.Korisnik).filter(models.Korisnik.ime == data['ime']).update({models.Korisnik.lozinka:generate_password_hash(data['nova_lozinka'])},synchronize_session=False)           
         else:
-            fillTable("/user")
             return jsonify({"Poruka":"Lozinke nisu iste"})
     else:
-        end_time = time.time()
-
-        fillTable("/user",trenutniKorisnik.id,end_time-start_time)
         return jsonify({"Poruka":"Pogresna Lozinka"})
     
     db.session.commit()   
-    end_time = time.time()
      
-    fillTable("/user",trenutniKorisnik.id,end_time-start_time)
     return jsonify({
         "poruka":"Uspjesno"
     })
