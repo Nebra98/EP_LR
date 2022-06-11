@@ -13,7 +13,7 @@ from sqlalchemy import delete
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS #comment this on deployment
 
-app = Flask(__name__, static_url_path='', static_folder='frontend/build')
+# app = Flask(__name__, static_url_path='', static_folder='frontend/build')
 CORS(app) #comment this on deployment
 @app.route('/register',methods=['POST'])
 def create_user():
@@ -35,6 +35,7 @@ def delete_user(korisnicko_ime):
 @app.route('/login',methods=['GET'])
 def login():
     auth = request.authorization
+    print()
     korisnik = models.Korisnik.query.filter_by(korisnicko_ime = auth.username).first()
     if not korisnik:
         return jsonify({"Poruka":"Pogreska"})
