@@ -20,5 +20,5 @@ def token_required(f):
             korisnicko_ime = trenutni_korisnik.korisnicko_ime
         except:
             return jsonify({"poruka":"Nepravilan token"}),401
-        return f(korisnicko_ime,*args,**kwargs)
+        return f(trenutni_korisnik,*args,**kwargs)
     return decorated
