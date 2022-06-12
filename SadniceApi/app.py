@@ -13,8 +13,13 @@ from sqlalchemy import delete
 from flask_restful import Api, Resource, reqparse
 #from flask_cors import CORS #comment this on deployment
 
+<<<<<<< HEAD
 #app = Flask(__name__, static_url_path='', static_folder='frontend/build')
 #CORS(app) #comment this on deployment
+=======
+# app = Flask(__name__, static_url_path='', static_folder='frontend/build')
+CORS(app) #comment this on deployment
+>>>>>>> 5f9b853270cefcd5e80bc9bc6331cee6aa8b5087
 @app.route('/register',methods=['POST'])
 def create_user():
     data = request.get_json()
@@ -35,7 +40,11 @@ def delete_user(korisnicko_ime):
 @app.route('/login',methods=['GET'])
 def login():
     auth = request.authorization
+<<<<<<< HEAD
     print(auth.username)
+=======
+    print()
+>>>>>>> 5f9b853270cefcd5e80bc9bc6331cee6aa8b5087
     korisnik = models.Korisnik.query.filter_by(korisnicko_ime = auth.username).first()
     if not korisnik:
         return jsonify({"Poruka":"Pogreska"})
@@ -71,7 +80,7 @@ def crud_sadnice():
         return jsonify({"Poruka":"Sadnica dodana"})
 
     elif request.method == 'DELETE':
-        models.Korisnik.query.filter(models.Sadnica.naziv==sadnica["naziv"]).delete()    
+        models.Sadnica.query.filter(models.Sadnica.naziv==sadnica["naziv"]).delete()    
         db.session.commit() 
         return jsonify({"Poruka":"Brisanje uspjesno"})
 
