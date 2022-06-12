@@ -11,9 +11,9 @@ from init import db,app
 from utilities import token_required
 from sqlalchemy import delete
 from flask_restful import Api, Resource, reqparse
-#from flask_cors import CORS #comment this on deployment
+from flask_cors import CORS #comment this on deployment
 
-# app = Flask(__name__, static_url_path='', static_folder='frontend/build')
+#app = Flask(__name__, static_url_path='', static_folder='frontend/build')
 CORS(app) #comment this on deployment
 @app.route('/register',methods=['POST'])
 def create_user():
@@ -46,7 +46,7 @@ def login():
             app.config['SECRET_KEY'],algorithm="HS256"),
         return jsonify({"token": token})
     
-@app.route('/sadnica',methods=['GET','POST','DELETE','PUT'])
+@app.route('/sadnica',methods=['GET','POST','DELETE','PUT','OPTIONS'])
 def crud_sadnice():
     sadnica = request.get_json()
     if request.method == 'GET':
@@ -65,16 +65,21 @@ def crud_sadnice():
         return jsonify({'Sadnice' : output})
 
     elif request.method == 'POST':
-        nova_sadnica = models.Sadnica(naziv=sadnica["naziv"],slika=sadnica["slika"],tip=sadnica["tip"],opis=sadnica["opis"])
+        print(sadnica["naziv"])
+
+        nova_sadnica = models.Sadnica(naziv=sadnica["naziv"],slika=sadnica["slika"],tip=sadnica["tip"],opis=sadnica["opis"], cijena=sadnica["cijena"])
         db.session.add(nova_sadnica)
         db.session.commit()        
         return jsonify({"Poruka":"Sadnica dodana"})
 
     elif request.method == 'DELETE':
+        print(sadnica["naziv"])
+        response = jsonify({"Poruka":"Brisanje uspjesno"})
+        response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
         models.Sadnica.query.filter(models.Sadnica.naziv==sadnica["naziv"]).delete()    
         db.session.commit() 
-        return jsonify({"Poruka":"Brisanje uspjesno"})
 
+        return response
     elif request.method == 'PUT':
         db.session.query(models.Sadnica).filter(models.Sadnica.naziv==sadnica["naziv"]).update({
             models.Sadnica.naziv : sadnica["naziv"],

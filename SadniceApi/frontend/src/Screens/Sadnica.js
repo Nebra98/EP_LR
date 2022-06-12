@@ -1,41 +1,41 @@
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from 'react'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 // import Product from "../components/Product";
 
 const Sadnica = (props) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const back = () => {
-    navigate("/");
-  };
-  let [data, setData] = useState();
+    navigate('/')
+  }
+  let [data, setData] = useState()
   useEffect(() => {
-    fetch("http://localhost:5000/sadnica", {
-      method: "GET",
+    fetch('http://localhost:5000/sadnica', {
+      method: 'GET',
       headers: {
-        "Access-Control-Allow-Origin": "null",
+        'Access-Control-Allow-Origin': 'null',
       },
-      mode: "cors",
+      mode: 'cors',
     })
       .then((response) => {
-        return response.json();
+        return response.json()
       })
-      .then((json) => setData(json));
-  }, []);
+      .then((json) => setData(json))
+  }, [])
   return (
     <div>
-      <div className="product ">
-        <div className="row top">
-          <div className="col-2">
+      <div className='product '>
+        <div className='row top'>
+          <div className='col-2'>
             <img
-              className="large"
+              className='large'
               src={data.Sadnice.slika}
               alt={data.Sadnice.naziv}
             ></img>
           </div>
-          <div className="col-1">
+          <div className='col-1'>
             <ul>
               <li>
                 <h1>{data.Sadnice.naziv}</h1>
@@ -54,7 +54,7 @@ const Sadnica = (props) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Sadnica;
+export default Sadnica

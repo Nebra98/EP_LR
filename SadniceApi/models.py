@@ -20,7 +20,7 @@ class Sadnica(db.Model):
 
     id = Column(Integer,primary_key=True)
     naziv = db.Column(String(50))
-    slika = Column(String(50))
+    slika = Column(String(500))
     tip = Column(String(50))
     opis = Column(String(50))
     cijena = Column(Float)
@@ -35,7 +35,7 @@ class Usluga(db.Model):
 
     id = Column(Integer,primary_key=True)
     naziv = Column(String(50))
-    slika = Column(String(50))
+    slika = Column(String(500))
     opis = Column(String(50))
     cijena = Column(Float)
 
