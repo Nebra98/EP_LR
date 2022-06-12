@@ -44,7 +44,11 @@ def login():
             'id': korisnik.id, 
             'exp':datetime.utcnow() + timedelta(hours=10)},
             app.config['SECRET_KEY'],algorithm="HS256"),
-        return jsonify({"token": token})
+        admin = korisnik.admin
+        naziv = korisnik.korisnicko_ime
+        
+        
+        return jsonify({"token": token, "admin": admin, "naziv": naziv})
     
 @app.route('/sadnica',methods=['GET','POST','DELETE','PATCH'])
 def crud_sadnice():

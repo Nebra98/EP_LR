@@ -1,15 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-// import { signin } from "../actions/userActions";
-// import Header from "../components/Header";
 
 const Signin = (props) => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  // const username = useRef(null);
-  // const password = useRef(null);
   const [getResult, setGetResult] = useState(null);
 
   const formatResponse = (res) => {
@@ -31,48 +26,20 @@ const Signin = (props) => {
       mode: "cors",
     })
       .then((response) => response.json())
-      .then((json) =>
-        localStorage.setItem("token", JSON.stringify(json.token))
-      );
-    // const user = username.current.value;
-    // if (user) {
-    //   try {
-    //     let url = new URL("http://localhost:5000/login");
-    //     const params = { korisnicko_ime: user };
-    //     url.search = new URLSearchParams(params);
-    //     console.log(fetch(url, { mode: "no-cors" }));
-    //     const res = await fetch(url, {
-    //       mode: "no-cors",
-    //     });
-    //     if (!res.ok) {
-    //       const message = `An error has occured: ${res.status} - ${res.statusText}`;
-    //       throw new Error(message);
-    //     }
-    //     const data = await res.json();
-    //     console.log(data);
-    //     const result = {
-    //       status: res.status + "-" + res.statusText,
-    //       headers: {
-    //         "Content-Type": res.headers.get("Content-Type"),
-    //         "Content-Length": res.headers.get("Content-Length"),
-
-    //         Authorization: "Basic " + btoa("username:password"),
-    //       },
-
-    //       data: data,
-    //     };
-    //     setGetResult(formatResponse(result));
-    //   } catch (err) {
-    //     setGetResult(err.message);
-    //   }
-    // }
+      .then((json) => localStorage.setItem("userInfo", JSON.stringify(json)))
+      .then((json) => window.location.reload());
   }
+
+  let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  }, [navigate, redirect, userInfo]);
 
   return (
     <div>
-      {/* <Header></Header> */}
-
-      <form className="form">
+      <form className="form" onSubmit={submitHandler}>
         <div>
           <h1>Sign In</h1>
         </div>
@@ -84,7 +51,6 @@ const Signin = (props) => {
             id="username"
             placeholder="Enter username"
             required
-            // ref={username}
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
@@ -95,13 +61,12 @@ const Signin = (props) => {
             id="password"
             placeholder="Enter password"
             required
-            // ref={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <div>
           <label />
-          <button className="primary" type="button" onClick={submitHandler}>
+          <button className="primary" type="submit">
             Sign In
           </button>
         </div>

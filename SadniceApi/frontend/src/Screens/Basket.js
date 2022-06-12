@@ -12,99 +12,202 @@ const Basket = (props) => {
   //   useEffect(() => {
   //     dispatch(listProducts({}));
   //   }, [dispatch]);
-  const cartItemsLoad = JSON.parse(localStorage.getItem("cartItems" || "[]"));
-
-  var [cartItems, setCartItems] = useState(cartItemsLoad);
+  const uslugaLoad = JSON.parse(localStorage.getItem("usluga" || "[]"));
+  const sadnicaLoad = JSON.parse(localStorage.getItem("sadnica" || "[]"));
+  let [usluga, setUsluga] = useState(uslugaLoad);
+  let [sadnica, setSadnica] = useState(sadnicaLoad);
 
   useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
+    localStorage.setItem("usluga", JSON.stringify(usluga));
+    localStorage.setItem("sadnica", JSON.stringify(sadnica));
+  }, [usluga, sadnica]);
+
+  if (!usluga) {
+    usluga = [];
+  }
+  if (!sadnica) {
+    sadnica = [];
+  }
 
   const { data } = props;
   const [name, setName] = useState("");
 
-  var totalPrice = cartItems.reduce((a, c) => a + c.qty * c.price, 0);
+  let cijenaUsluge = usluga.reduce((a, c) => a + c.qty * c.price, 0);
+  let cijenaSadnice = sadnica.reduce((a, c) => a + c.qty * c.price, 0);
+  let totalPrice = cijenaUsluge + cijenaSadnice;
 
   const navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();
+    window.alert("Narudžba zaprimljena");
+    if (sadnica.length !== 0) {
+      // const [dataSadnica, setDataSadnica] = useState({
+      //     cijena: cijenaSadnice,
+      //     sadnica_id: sadnica
+      //     korisnik_id: userInfo.id,
+      // })
+      console.log(JSON.stringify(data));
+      fetch("http://localhost:5000/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+        mode: "cors",
+      }).then(() => {
+        console.log("new order added");
+      });
 
-    navigate("/shipping");
+      localStorage.removeItem("sadnica");
+    }
+
+    if (usluga.length !== 0) {
+      fetch("http://localhost:5000/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+        mode: "cors",
+      }).then(() => {
+        console.log("new order added");
+      });
+
+      localStorage.removeItem("usluga");
+    }
+
+    navigate("/");
   };
 
-  let tp = cartItems.reduce((a, c) => a + c.qty * c.price, 0);
+  const onAddSadnica = (product) => {
+    localStorage.setItem("sadnica", JSON.stringify(product));
 
-  const onAdd = (product) => {
-    localStorage.setItem("cartItems", JSON.stringify(product));
-
-    const varijabla = JSON.parse(localStorage.getItem("cartItems"));
-
-    const exist = cartItems.find((x) => x._id === product._id);
-    if (exist) {
-      setCartItems(
-        cartItems.map((x) =>
-          x._id === product._id ? { ...exist, qty: exist.qty + 1 } : x
+    const sadnicaExist = sadnica.find((x) => x.id === product.id);
+    if (sadnicaExist) {
+      setSadnica(
+        sadnica.map((x) =>
+          x.id === product.id
+            ? { ...sadnicaExist, qty: sadnicaExist.qty + 1 }
+            : x
         )
       );
     } else {
-      setCartItems([...cartItems, { ...product, qty: 1 }]);
+      setSadnica([...sadnica, { ...product, qty: 1 }]);
     }
   };
 
-  const onRemove = (product) => {
-    const exist = cartItems.find((x) => x._id === product._id);
-    if (exist.qty === 1) {
-      setCartItems(cartItems.filter((x) => x._id !== product._id));
+  const onAddUsluga = (product) => {
+    localStorage.setItem("usluga", JSON.stringify(product));
+
+    const uslugaExist = usluga.find((x) => x.id === product.id);
+    if (uslugaExist) {
+      setUsluga(
+        usluga.map((x) =>
+          x.id === product.id ? { ...uslugaExist, qty: uslugaExist.qty + 1 } : x
+        )
+      );
     } else {
-      setCartItems(
-        cartItems.map((x) =>
-          x._id === product._id ? { ...exist, qty: exist.qty - 1 } : x
+      setUsluga([...usluga, { ...product, qty: 1 }]);
+    }
+  };
+
+  const onRemoveSadnica = (product) => {
+    const sadnicaExist = sadnica.find((x) => x.id === product.id);
+    if (sadnicaExist.qty === 1) {
+      setSadnica(sadnica.filter((x) => x.id !== product.id));
+    } else {
+      setSadnica(
+        sadnica.map((x) =>
+          x.id === product.id
+            ? { ...sadnicaExist, qty: sadnicaExist.qty - 1 }
+            : x
         )
       );
     }
   };
+
+  const onRemoveUsluga = (product) => {
+    const uslugaExist = usluga.find((x) => x.id === product.id);
+    if (uslugaExist.qty === 1) {
+      setUsluga(usluga.filter((x) => x.id !== product.id));
+    } else {
+      setUsluga(
+        usluga.map((x) =>
+          x.id === product.id ? { ...uslugaExist, qty: uslugaExist.qty - 1 } : x
+        )
+      );
+    }
+  };
+
   return (
     <div className="block col-1">
       <form className="form">
-        <h2>Cart Items</h2>
+        <h2>Korpa</h2>
         <div>
-          {cartItems.length === 0 && <div>Cart is empty</div>}
-          {cartItems.map((item) => (
-            <div key={item.id} className="row">
-              <div className="col-2">{item.naziv}</div>
-              <div className="col-2">
-                <button
-                  type="button"
-                  onClick={() => onRemove(item)}
-                  className="remove"
-                >
-                  -
-                </button>{" "}
-                <button
-                  type="button"
-                  onClick={() => onAdd(item)}
-                  className="add"
-                >
-                  +
-                </button>
-              </div>
-
-              <div className="col-2 text-right">
-                {item.qty} x {Number(item.cijena).toFixed(2)} €
-              </div>
-            </div>
-          ))}
-
-          <input
-            type="text"
-            placeholder="Promotion Code"
-            id="promo-code"
-            onChange={(f) => setName(f.target.value)}
-          />
-
-          {cartItems.length !== 0 && (
+          {sadnica.length === 0 && usluga.length === 0 && (
+            <div>Korpa je prazna</div>
+          )}
+          {(sadnica.length !== 0 || usluga.length !== 0) && (
             <>
+              {sadnica.length !== 0 && (
+                <>
+                  <h2>Sadnice</h2>
+
+                  {sadnica.map((item) => (
+                    <div key={item.id} className="row">
+                      <div className="col-2">{item.naziv}</div>
+                      <div className="col-2">
+                        <button
+                          type="button"
+                          onClick={() => onRemoveSadnica(item)}
+                          className="remove"
+                        >
+                          -
+                        </button>{" "}
+                        <button
+                          type="button"
+                          onClick={() => onAddSadnica(item)}
+                          className="add"
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      <div className="col-2 text-right">
+                        {item.qty} x {Number(item.cijena).toFixed(2)} €
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+              {usluga.length !== 0 && (
+                <>
+                  <h2>Usluge</h2>
+                  {usluga.map((item) => (
+                    <div key={item.id} className="row">
+                      <div className="col-2">{item.naziv}</div>
+                      <div className="col-2">
+                        <button
+                          type="button"
+                          onClick={() => onRemoveUsluga(item)}
+                          className="remove"
+                        >
+                          -
+                        </button>{" "}
+                        <button
+                          type="button"
+                          onClick={() => onAddUsluga(item)}
+                          className="add"
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      <div className="col-2 text-right">
+                        {item.qty} x {Number(item.cijena).toFixed(2)} €
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+
               <div className="row">
                 <div className="col-2">
                   <strong>Total Price</strong>
@@ -119,7 +222,7 @@ const Basket = (props) => {
                 <button
                   type="button"
                   className="primary"
-                  disabled={cartItems.length === 0}
+                  disabled={sadnica.length === 0}
                   onClick={submitHandler}
                 >
                   Checkout

@@ -45,7 +45,6 @@ const NoveUsluge = () => {
       body: JSON.stringify(data),
       mode: "cors",
     });
-    // dispatch(newProduct(name, price, image, description, quantity, discount));
     window.alert("Dodali ste novu uslugu koja je zove " + naziv);
     window.location.reload();
   };

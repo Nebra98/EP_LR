@@ -20,27 +20,31 @@ class Sadnica(db.Model):
 
     id = Column(Integer,primary_key=True)
     naziv = db.Column(String(50))
-    slika = Column(String(50))
+    slika = Column(String(500))
     tip = Column(String(50))
     opis = Column(String(50))
+    cijena = Column(Float)
 
     def __init__(self,naziv,slika,tip,opis):
         self.naziv = naziv
         self.slika = slika
         self.tip = tip
         self.opis = opis
+        self.cijena = cijena
 class Usluga(db.Model):
 
     id = Column(Integer,primary_key=True)
     naziv = Column(String(50))
-    slika = Column(String(50))
+    slika = Column(String(500))
     opis = Column(String(50))
+    cijena = Column(Float)
 
 
     def __init__(self,naziv,slika,opis):
         self.naziv = naziv
         self.slika = slika
         self.opis = opis
+        self.cijena = cijena
 class Korisnik_Usluga(db.Model):
     id = Column(Integer,primary_key=True)
     cijena = Column(Float)

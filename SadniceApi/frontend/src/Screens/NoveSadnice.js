@@ -40,7 +40,7 @@ const NoveSadnice = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     const data = { naziv, slika, tip, opis };
-
+    console.log(data);
     fetch("http://localhost:5000/sadnica", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -48,19 +48,18 @@ const NoveSadnice = () => {
       mode: "cors",
     });
     window.alert("You have added a new product called " + naziv);
-    window.location.reload();
+    // window.location.reload();
   };
   const clickHandler = (sadnica) => {
     console.log(JSON.stringify(sadnica));
     if (window.confirm("Are you sure you want to remove " + sadnica.naziv)) {
       fetch("http://localhost:5000/sadnica", {
         method: "DELETE",
-        header: {
-          "Access-Control-Allow-Origin": "https://localhost:5000/sadnica",
-          "Access-Control-Allow-Credentials": true,
+        headers: new Headers({
+          "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
-          "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE",
-        },
+          "Access-Control-Allow-Methods": "DELETE",
+        }),
         body: JSON.stringify(sadnica),
         mode: "cors",
       });
