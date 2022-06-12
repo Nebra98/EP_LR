@@ -148,6 +148,8 @@ def crud_usluga_korisnik(trenutni_korisnik):
         return jsonify({'Usluge' : output})
 
     elif request.method == 'POST':
+        for usluga in usluga_korisnik:
+            print(usluga)
         usluga_ID = db.session.query(models.Usluga).filter(models.Usluga.naziv==usluga_korisnik["naziv_usluge"]).first()
         nova_usluga = models.Korisnik_Usluga(cijena=usluga_ID.cijena,usluga_id=usluga_ID.id,korisnik_id=trenutni_korisnik.id)
         db.session.add(nova_usluga)
