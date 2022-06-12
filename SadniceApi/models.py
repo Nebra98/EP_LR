@@ -52,6 +52,7 @@ class Korisnik_Usluga(db.Model):
     usluga_id = Column(Integer)
     korisnik_id = Column(Integer)
 
+
     
     def __init__(self,cijena,usluga_id,korisnik_id):
         self.cijena = cijena
@@ -63,9 +64,11 @@ class Korisnik_Sadnica(db.Model):
     cijena = Column(Float)
     sadnica_id = Column(Integer)
     korisnik_id = Column(Integer)
+    broj = Column(Integer)
 
     
-    def __init__(self,cijena,sadnica_id,korisnik_id):
+    def __init__(self,cijena,sadnica_id,korisnik_id,broj):
         self.cijena = cijena
         self.korisnik_id = korisnik_id
         self.sadnica_id = sadnica_id
+        self.broj = broj

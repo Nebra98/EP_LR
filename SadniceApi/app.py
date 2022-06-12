@@ -155,10 +155,9 @@ def crud_usluga_korisnik(trenutni_korisnik):
 
     elif request.method == 'POST':
         for usluga in usluga_korisnik:
-            print(usluga)
-        usluga_ID = db.session.query(models.Usluga).filter(models.Usluga.naziv==usluga_korisnik["naziv_usluge"]).first()
-        nova_usluga = models.Korisnik_Usluga(cijena=usluga_ID.cijena,usluga_id=usluga_ID.id,korisnik_id=trenutni_korisnik.id)
-        db.session.add(nova_usluga)
+            nova_usluga = db.session.query(models.Korisnik_Usluga).filter(models.Korisnik_Usluga.naziv==usluga["naziv"]).first()
+            DodanaUsluga = models.Korisnik_Usluga(cijena=nova_usluga.cijena,sadnica_id=nova_usluga.id,korisnik_id=trenutni_korisnik.id)
+            db.session.add(DodanaUsluga)
         db.session.commit()        
         return jsonify({"Poruka":"Usluga dodana"})
 
@@ -183,15 +182,19 @@ def crud_sadnica_korisnik(trenutni_korisnik):
             data = {
                 "id":sadnica.id,
                 "cijena":sadnica.cijena,
-                "usluga":nova_sadnica.naziv,
+                "sadnica":nova_sadnica.naziv,
+                "broj" : nova_sadnica.broj
                 }
             output.append(data)
         return jsonify({'Sadnice' : output})
 
     elif request.method == 'POST':
-        nova_sadnica = db.session.query(models.Sadnica).filter(models.Sadnica.naziv==sadnica_korisnik["naziv"]).first()
-        nova_usluga = models.Korisnik_Sadnica(cijena=nova_sadnica.cijena,sadnica_id=nova_sadnica.id,korisnik_id=trenutni_korisnik.id)
-        db.session.add(nova_usluga)
+        for sadnica in sadnica_korisnik:
+            naziv = jsonify({"naziv":sadnica["naziv"]})
+            print(sadnica['naziv'])
+            nova_sadnica = db.session.query(models.Sadnica).filter(models.Sadnica.naziv==sadnica["naziv"]).first()
+            nova_usluga = models.Korisnik_Sadnica(cijena=nova_sadnica.cijena,sadnica_id=nova_sadnica.id,korisnik_id=trenutni_korisnik.id,broj = nova_sadnica.broj)
+            db.session.add(nova_usluga)
         db.session.commit()        
         return jsonify({"Poruka":"Sadnica dodana"})
 
@@ -201,13 +204,14 @@ def crud_sadnica_korisnik(trenutni_korisnik):
         db.session.commit() 
         return jsonify({"Poruka":"Brisanje uspjesno"})
 
-    elif request.method == 'PATCH':
+    elif request.method == 'PUT':
         sadnica_ID = db.session.query(models.Sadnica).filter(models.Sadnica.naziv==sadnica_korisnik["naziv"]).first()
 
         db.session.query(models.Korisnik_Sadnica).filter(models.Korisnik_Sadnica.sadnica_id==sadnica_ID.id).update({
             models.Korisnik_Sadnica.cijena : sadnica_korisnik["cijena"],
             models.Korisnik_Sadnica.korisnik_id:trenutni_korisnik.id,
-            models.Korisnik_Sadnica.sadnica_id: sadnica_ID.id
+            models.Korisnik_Sadnica.sadnica_id: sadnica_ID.id,
+            models.models.Korisnik_Sadnica.broj : sadnica_korisnik["broj"],
         })    
         db.session.commit()
         return jsonify({"Poruka":"Azuriranje uspjesno"})
