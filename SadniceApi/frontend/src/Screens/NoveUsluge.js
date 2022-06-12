@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 
 const NoveUsluge = () => {
   const [naziv, setNaziv] = useState("");
-  //   const [price, setPrice] = useState("");
+  const [cijena, setCijena] = useState("");
   const [slika, setSlika] = useState("");
   const [opis, setOpis] = useState("");
   //   const [discount, setDiscount] = useState("");
 
   let [data, setData] = useState();
   useEffect(() => {
-    fetch("https://localhost:5000/usluga", {
+    fetch("http://localhost:5000/usluga", {
       method: "GET",
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "null",
         // Authorization: "Basic " + btoa(username + ":" + password),
       },
       mode: "cors",
@@ -37,13 +37,13 @@ const NoveUsluge = () => {
   //   };
   const submitHandler = (e) => {
     e.preventDefault();
-    const data = { naziv, slika, opis };
+    const data = { naziv, slika, opis, cijena };
 
     fetch("http://localhost:5000/usluga", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify(data),
       mode: "cors",
@@ -55,15 +55,15 @@ const NoveUsluge = () => {
     if (window.confirm("Jeste li sigurni da želite ukloniti " + usluga.naziv)) {
       fetch("http://localhost:5000/usluga", {
         method: "DELETE",
-        body: usluga,
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
+        headers: new Headers({
           "Access-Control-Allow-Origin": "*",
-        },
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Methods": "DELETE",
+        }),
+        body: JSON.stringify(usluga),
+        mode: "cors",
       });
 
-      //   dispatch(deleteProduct(id));
       window.alert("Uklonili ste " + usluga.naziv);
       window.location.reload();
     }
@@ -98,16 +98,16 @@ const NoveUsluge = () => {
             onChange={(e) => setSlika(e.target.value)}
           />
         </div>
-        {/* <div>
-          <label htmlFor="price">Price</label>
+        <div>
+          <label htmlFor="cijena">Cijena</label>
           <input
             type="number"
-            id="price"
-            placeholder="Enter a price"
+            id="cijena"
+            placeholder="Unesite cijenu"
             required
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) => setCijena(e.target.value)}
           />
-        </div> */}
+        </div>
 
         <div>
           <label htmlFor="opis">Opis</label>

@@ -38,7 +38,7 @@ def login():
     print()
     korisnik = models.Korisnik.query.filter_by(korisnicko_ime = auth.username).first()
     if not korisnik:
-        return jsonify({"Poruka":"Pogreska"})
+        return 
     if check_password_hash(korisnik.lozinka, auth.password):
         token = jwt.encode({
             'id': korisnik.id, 
@@ -64,6 +64,7 @@ def crud_sadnice():
                 "slika":sadnica.slika,
                 "tip":sadnica.tip,
                 "opis":sadnica.opis,
+                "cijena":sadnica.cijena,
                 }
             output.append(data)
         return jsonify({'Sadnice' : output})
@@ -109,12 +110,13 @@ def crud_usluga():
                 "naziv":usluga.naziv,
                 "slika":usluga.slika,
                 "opis":usluga.opis,
+                "cijena":usluga.cijena,
                 }
             output.append(data)
         return jsonify({'Usluge' : output})
 
     elif request.method == 'POST':
-        nova_usluga = models.Usluga(naziv=usluga["naziv"],slika=usluga["slika"],opis=usluga["opis"])
+        nova_usluga = models.Usluga(naziv=usluga["naziv"],slika=usluga["slika"],opis=usluga["opis"], cijena=usluga["cijena"])
         db.session.add(nova_usluga)
         db.session.commit()        
         return jsonify({"Poruka":"Usluga dodana"})

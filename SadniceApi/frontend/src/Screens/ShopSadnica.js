@@ -15,8 +15,6 @@ const ShopSadnica = () => {
   const onAdd = (product) => {
     localStorage.setItem("sadnica", JSON.stringify(product));
 
-    const varijabla = JSON.parse(localStorage.getItem("sadnica"));
-
     const exist = sadnica.find((x) => x.id === product.id);
     if (exist) {
       setSadnica(
