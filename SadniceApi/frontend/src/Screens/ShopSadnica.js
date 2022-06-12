@@ -19,11 +19,11 @@ const ShopSadnica = () => {
     if (exist) {
       setSadnica(
         sadnica.map((x) =>
-          x.id === product.id ? { ...exist, qty: exist.qty + 1 } : x
+          x.id === product.id ? { ...exist, broj: exist.broj + 1 } : x
         )
       );
     } else {
-      setSadnica([...sadnica, { ...product, qty: 1 }]);
+      setSadnica([...sadnica, { ...product, broj: 1 }]);
     }
   };
 

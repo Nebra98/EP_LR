@@ -21,11 +21,11 @@ const ShopUsluga = () => {
     if (exist) {
       setCartItems(
         usluga.map((x) =>
-          x.id === product.id ? { ...exist, qty: exist.qty + 1 } : x
+          x.id === product.id ? { ...exist, broj: exist.broj + 1 } : x
         )
       );
     } else {
-      setCartItems([...usluga, { ...product, qty: 1 }]);
+      setCartItems([...usluga, { ...product, broj: 1 }]);
     }
   };
 
