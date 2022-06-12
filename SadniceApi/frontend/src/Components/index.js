@@ -5,23 +5,34 @@ import Signin from "../Screens/Signin";
 import Register from "../Screens/Register";
 import NoveSadnice from "../Screens/NoveSadnice";
 import NoveUsluge from "../Screens/NoveUsluge";
-import Sadnica from "../Screens/Sadnica";
-import Shop from "../Screens/Shop";
 import Basket from "../Screens/Basket";
+import Navigacija from "./Navigacija";
+import ShopSadnica from "../Screens/ShopSadnica";
+import ShopUsluga from "../Screens/ShopUsluga";
+import Povijest from "../Screens/Povijest";
+import ProtectedRouters from "./ProtectedRouters";
 const index = () => {
   return (
     <Router>
+      <Navigacija></Navigacija>
       <Routes>
         <Route exacth path="/" element={<Home />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/novesadnice" element={<NoveSadnice />} />
-        <Route path="/noveusluge" element={<NoveUsluge />} />
-        {/* <Route path="/usluge" element={<Usluga />} /> */}
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/basket" element={<Basket />} />
+        <Route element={<ProtectedRouters />}>
+          <Route path="/novesadnice" element={<NoveSadnice />} />
+          <Route path="/noveusluge" element={<NoveUsluge />} />
+        </Route>
 
-        <Route path="/sadnica/:id" element={<Sadnica />} />
+        {/* <Route path="/usluge" element={<Usluga />} /> */}
+        <Route path="/shop/sadnica" element={<ShopSadnica />} />
+        <Route path="/shop/usluga" element={<ShopUsluga />} />
+        <Route path="/povijest" element={<Povijest />} />
+
+        <Route path="/korpa" element={<Basket />} />
+
+        {/* <Route path="/sadnica/:id" element={<Sadnica />} /> */}
+        {/* <Route path="/usluga/:id" element={<Usluga />} /> */}
       </Routes>
     </Router>
   );

@@ -12,12 +12,9 @@ const Register = (props) => {
   const [lozinka, setLozinka] = useState("");
   const [potvrdi_lozinku, setPotvrdi_lozinku] = useState("");
   const [admin, setAdmin] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
   const { search } = useLocation();
   const redirectInUrl = new URLSearchParams(search).get("redirect");
   const redirect = redirectInUrl ? redirectInUrl : "/";
-  //   const userRegister = useSelector((state) => state.userRegister);
-  //   const { userInfo } = userRegister;
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -34,18 +31,17 @@ const Register = (props) => {
       }).then(() => {
         console.log("new user added");
       });
-      //   dispatch(register(name, email, password));
     }
   };
-  //   useEffect(() => {
-  //     if (userInfo) {
-  //       navigate(redirect);
-  //     }
-  //   }, [navigate, redirect, userInfo]);
+
+  let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  }, [navigate, redirect, userInfo]);
   return (
     <div>
-      {/* <Header countCartItems={cartItems.length}></Header> */}
-
       <form className="form" onSubmit={submitHandler}>
         <div>
           <h1>Create Account</h1>

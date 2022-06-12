@@ -3,7 +3,7 @@ import Sadnica from "./Sadnica";
 // import { useDispatch, useSelector } from "react-redux";
 // import { listProducts } from "../actions/productActions";
 
-const Main = (props) => {
+const MainSadnica = (props) => {
   // const dispatch = useDispatch();
   // const productList = useSelector((state) => state.productList);
 
@@ -46,4 +46,4 @@ const Main = (props) => {
   );
 };
 
-export default Main;
+export default MainSadnica;

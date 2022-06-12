@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 
 const NoveUsluge = () => {
-  const [naziv, setNaziv] = useState('')
-  //   const [price, setPrice] = useState("");
-  const [slika, setSlika] = useState('')
-  const [opis, setOpis] = useState('')
+  const [naziv, setNaziv] = useState("");
+  const [cijena, setCijena] = useState("");
+  const [slika, setSlika] = useState("");
+  const [opis, setOpis] = useState("");
   //   const [discount, setDiscount] = useState("");
 
-  let [data, setData] = useState()
+  let [data, setData] = useState();
   useEffect(() => {
-    fetch('https://localhost:5000/usluga', {
-      method: 'GET',
+    fetch("http://localhost:5000/usluga", {
+      method: "GET",
       headers: {
-        'Access-Control-Allow-Origin': '*',
+        "Access-Control-Allow-Origin": "null",
         // Authorization: "Basic " + btoa(username + ":" + password),
       },
-      mode: 'cors',
+      mode: "cors",
     })
       .then((response) => {
         // if (!response.ok) {
         //   Logging.error(`Did not get an ok. got: ${response.statusText}`);
         // }
-        return response.json()
+        return response.json();
       })
-      .then((json) => setData(json)) //setData here
+      .then((json) => setData(json)); //setData here
     //  .catch((error) => {
     //  Logging.error(`Error getting ad data: ${error.message}`);
     //  }
@@ -31,91 +31,90 @@ const NoveUsluge = () => {
     //   .then(
     //     (json) => console.log(json)
     // localStorage.setItem("token", JSON.stringify(json.token))
-  }, [])
+  }, []);
   //   const clickHandler1 = () => {
   //     console.log(data);
   //   };
   const submitHandler = (e) => {
-    e.preventDefault()
-    const data = { naziv, slika, opis }
+    e.preventDefault();
+    const data = { naziv, slika, opis, cijena };
 
-    fetch('http://localhost:5000/usluga', {
-      method: 'POST',
+    fetch("http://localhost:5000/usluga", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        "Content-Type": "application/json",
+        // "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify(data),
-      mode: 'cors',
-    })
-    // dispatch(newProduct(name, price, image, description, quantity, discount));
-    window.alert('Dodali ste novu uslugu koja je zove ' + naziv)
-    window.location.reload()
-  }
+      mode: "cors",
+    });
+    window.alert("Dodali ste novu uslugu koja je zove " + naziv);
+    window.location.reload();
+  };
   const clickHandler = (usluga) => {
-    if (window.confirm('Jeste li sigurni da želite ukloniti ' + usluga.naziv)) {
-      fetch('http://localhost:5000/usluga', {
-        method: 'DELETE',
-        body: usluga,
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      })
+    if (window.confirm("Jeste li sigurni da želite ukloniti " + usluga.naziv)) {
+      fetch("http://localhost:5000/usluga", {
+        method: "DELETE",
+        headers: new Headers({
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Methods": "DELETE",
+        }),
+        body: JSON.stringify(usluga),
+        mode: "cors",
+      });
 
-      //   dispatch(deleteProduct(id));
-      window.alert('Uklonili ste ' + usluga.naziv)
-      window.location.reload()
+      window.alert("Uklonili ste " + usluga.naziv);
+      window.location.reload();
     }
-  }
+  };
 
   return (
     <div>
-      <header className='block row center color'>
+      <header className="block row center color">
         <div>
           <h1>Dodavanje Usluga</h1>
         </div>
       </header>
-      <form className='form' onSubmit={submitHandler}>
+      <form className="form" onSubmit={submitHandler}>
         <div></div>
         <div>
-          <label htmlFor='naziv'>Naziv</label>
+          <label htmlFor="naziv">Naziv</label>
           <input
-            type='text'
-            id='naziv'
-            placeholder='Unesite naziv'
+            type="text"
+            id="naziv"
+            placeholder="Unesite naziv"
             required
             onChange={(e) => setNaziv(e.target.value)}
           />
         </div>
         <div>
-          <label htmlFor='slika'>Slika</label>
+          <label htmlFor="slika">Slika</label>
           <input
-            type='text'
-            id='slika'
-            placeholder='Unesite URL slike'
+            type="text"
+            id="slika"
+            placeholder="Unesite URL slike"
             required
             onChange={(e) => setSlika(e.target.value)}
           />
         </div>
-        {/* <div>
-          <label htmlFor="price">Price</label>
+        <div>
+          <label htmlFor="cijena">Cijena</label>
           <input
             type="number"
-            id="price"
-            placeholder="Enter a price"
+            id="cijena"
+            placeholder="Unesite cijenu"
             required
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) => setCijena(e.target.value)}
           />
-        </div> */}
+        </div>
 
         <div>
-          <label htmlFor='opis'>Opis</label>
+          <label htmlFor="opis">Opis</label>
           <input
-            type='text'
-            id='opis'
-            placeholder='Unesite opis'
+            type="text"
+            id="opis"
+            placeholder="Unesite opis"
             onChange={(e) => setOpis(e.target.value)}
           />
         </div>
@@ -129,7 +128,7 @@ const NoveUsluge = () => {
           />
         </div> */}
 
-        <button className='primary' type='submit'>
+        <button className="primary" type="submit">
           ADD
         </button>
 
@@ -143,8 +142,8 @@ const NoveUsluge = () => {
           ? data.Usluge.map((usluga) => (
               <div key={usluga.id}>
                 <button
-                  type='button'
-                  className='promo'
+                  type="button"
+                  className="promo"
                   onClick={() => clickHandler(usluga)}
                 >
                   {usluga.naziv}
@@ -154,7 +153,7 @@ const NoveUsluge = () => {
           : null}
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default NoveUsluge
+export default NoveUsluge;

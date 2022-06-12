@@ -64,7 +64,7 @@ const NoveSadnice = () => {
       })
 
       window.alert('You have removed ' + sadnica.naziv)
-      window.location.reload()
+      // window.location.reload();
     }
   }
 
