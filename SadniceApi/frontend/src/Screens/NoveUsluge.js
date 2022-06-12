@@ -5,7 +5,6 @@ const NoveUsluge = () => {
   const [cijena, setCijena] = useState("");
   const [slika, setSlika] = useState("");
   const [opis, setOpis] = useState("");
-  //   const [discount, setDiscount] = useState("");
 
   let [data, setData] = useState();
   useEffect(() => {
@@ -13,28 +12,14 @@ const NoveUsluge = () => {
       method: "GET",
       headers: {
         "Access-Control-Allow-Origin": "null",
-        // Authorization: "Basic " + btoa(username + ":" + password),
       },
       mode: "cors",
     })
       .then((response) => {
-        // if (!response.ok) {
-        //   Logging.error(`Did not get an ok. got: ${response.statusText}`);
-        // }
         return response.json();
       })
-      .then((json) => setData(json)); //setData here
-    //  .catch((error) => {
-    //  Logging.error(`Error getting ad data: ${error.message}`);
-    //  }
-    //  )
-    //   .then(
-    //     (json) => console.log(json)
-    // localStorage.setItem("token", JSON.stringify(json.token))
+      .then((json) => setData(json));
   }, []);
-  //   const clickHandler1 = () => {
-  //     console.log(data);
-  //   };
   const submitHandler = (e) => {
     e.preventDefault();
     const data = { naziv, slika, opis, cijena };
@@ -43,12 +28,11 @@ const NoveUsluge = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify(data),
       mode: "cors",
     });
-    window.alert("Dodali ste novu uslugu koja je zove " + naziv);
+    window.alert("Dodali ste novu uslugu koja se zove " + naziv);
     window.location.reload();
   };
   const clickHandler = (usluga) => {
@@ -118,15 +102,6 @@ const NoveUsluge = () => {
             onChange={(e) => setOpis(e.target.value)}
           />
         </div>
-        {/* <div>
-          <label htmlFor="name">Discount</label>
-          <input
-            type="number"
-            id="discount"
-            placeholder="Enter a discount"
-            onChange={(e) => setDiscount(e.target.value)}
-          />
-        </div> */}
 
         <button className="primary" type="submit">
           ADD
@@ -135,9 +110,6 @@ const NoveUsluge = () => {
         <div>
           <h1>Brisanje Usluga</h1>
         </div>
-        {/* <button className="primary" type="button" onClick={clickHandler1}>
-          click
-        </button> */}
         {data !== undefined
           ? data.Usluge.map((usluga) => (
               <div key={usluga.id}>

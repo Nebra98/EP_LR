@@ -180,10 +180,11 @@ def crud_sadnica_korisnik(trenutni_korisnik):
         for sadnica in sadnice:
             nova_sadnica = db.session.query(models.Sadnica).filter(models.Sadnica.id==sadnica.sadnica_id).first()
             data = {
-                "id":sadnica.id,
+                "id_sadnica":sadnica.id,
+                "id_korisnik":trenutni_korisnik.id,
                 "cijena":sadnica.cijena,
                 "sadnica":nova_sadnica.naziv,
-                "broj" : nova_sadnica.broj
+                "broj" : sadnica.broj
                 }
             output.append(data)
         return jsonify({'Sadnice' : output})

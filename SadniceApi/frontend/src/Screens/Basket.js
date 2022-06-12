@@ -3,15 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 const Basket = (props) => {
-  //   const dispatch = useDispatch();
-  //   const productList = useSelector((state) => state.productList);
-
-  //   let { product } = { products: {} };
-  //   product = productList.products;
-
-  //   useEffect(() => {
-  //     dispatch(listProducts({}));
-  //   }, [dispatch]);
   const uslugaLoad = JSON.parse(localStorage.getItem("usluga" || "[]"));
   const sadnicaLoad = JSON.parse(localStorage.getItem("sadnica" || "[]"));
   const userInfoLoad = JSON.parse(localStorage.getItem("userInfo" || "[]"));
@@ -31,11 +22,8 @@ const Basket = (props) => {
     sadnica = [];
   }
 
-  const { data } = props;
-  const [name, setName] = useState("");
-
-  let cijenaUsluge = usluga.reduce((a, c) => a + c.broj * c.price, 0);
-  let cijenaSadnice = sadnica.reduce((a, c) => a + c.broj * c.price, 0);
+  let cijenaUsluge = usluga.reduce((a, c) => a + c.broj * c.cijena, 0);
+  let cijenaSadnice = sadnica.reduce((a, c) => a + c.broj * c.cijena, 0);
   let totalPrice = cijenaUsluge + cijenaSadnice;
 
   const navigate = useNavigate();
@@ -98,22 +86,20 @@ const Basket = (props) => {
     }
   };
 
-  const onAddUsluga = (product) => {
-    localStorage.setItem("usluga", JSON.stringify(product));
+  // const onAddUsluga = (product) => {
+  //   localStorage.setItem("usluga", JSON.stringify(product));
 
-    const uslugaExist = usluga.find((x) => x.id === product.id);
-    if (uslugaExist) {
-      setUsluga(
-        usluga.map((x) =>
-          x.id === product.id
-            ? { ...uslugaExist, broj: uslugaExist.broj + 1 }
-            : x
-        )
-      );
-    } else {
-      setUsluga([...usluga, { ...product, broj: 1 }]);
-    }
-  };
+  //   const uslugaExist = usluga.find((x) => x.id === product.id);
+  //   if (uslugaExist) {
+  //     setUsluga(
+  //       usluga.map((x) =>
+  //         x.id === product.id ? { ...uslugaExist, broj: uslugaExist.broj } : x
+  //       )
+  //     );
+  //   } else {
+  //     setUsluga([...usluga, { ...product, broj: 1 }]);
+  //   }
+  // };
 
   const onRemoveSadnica = (product) => {
     const sadnicaExist = sadnica.find((x) => x.id === product.id);
@@ -200,13 +186,13 @@ const Basket = (props) => {
                         >
                           -
                         </button>{" "}
-                        <button
+                        {/* <button
                           type="button"
                           onClick={() => onAddUsluga(item)}
                           className="add"
                         >
                           +
-                        </button>
+                        </button> */}
                       </div>
 
                       <div className="col-2 text-right">

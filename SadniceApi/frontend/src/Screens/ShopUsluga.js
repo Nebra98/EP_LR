@@ -15,13 +15,11 @@ const ShopUsluga = () => {
   const onAdd = (product) => {
     localStorage.setItem("usluga", JSON.stringify(product));
 
-    const varijabla = JSON.parse(localStorage.getItem("usluga"));
-
     const exist = usluga.find((x) => x.id === product.id);
     if (exist) {
       setCartItems(
         usluga.map((x) =>
-          x.id === product.id ? { ...exist, broj: exist.broj + 1 } : x
+          x.id === product.id ? { ...exist, broj: exist.broj } : x
         )
       );
     } else {

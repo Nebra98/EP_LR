@@ -101,3 +101,66 @@ a {
 li {
   list-style-type: none;
 }
+/* Table */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table tbody tr:nth-of-type(odd) {
+  background-color: #f4f4f4;
+}
+
+.table td,
+.table th {
+  text-align: left;
+  border: 0.1rem solid #e4e4e4;
+  padding: 0.5rem;
+}
+
+.table button {
+  margin: 0 0.2rem;
+}
+
+.product {
+  min-width: 150px;
+  padding-top: 15px;
+}
+
+th {
+  display: block;
+}
+
+.orderHistory {
+  display: inline;
+}
+
+.item {
+  display: block;
+}
+
+.order {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.long {
+
+  width: 25%;
+}
+
+tr {
+  width: 25%
+}
+
+td {
+  width: 92.1%;
+  color: black;
+}
+
+.none {
+  display: none;
+}

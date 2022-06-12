@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-// import { register } from "../actions/userActions";
-// import Header from "../components/Header";
 
 const Register = (props) => {
   const navigate = useNavigate();
-  //   const dispatch = useDispatch();
   const [korisnicko_ime, setKorisnicko_ime] = useState("");
   const [email, setEmail] = useState("");
   const [lozinka, setLozinka] = useState("");
@@ -28,9 +24,11 @@ const Register = (props) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
         mode: "cors",
-      }).then(() => {
-        console.log("new user added");
-      });
+      })
+        .then(() => {
+          console.log("new user added");
+        })
+        .then(navigate("/"));
     }
   };
 

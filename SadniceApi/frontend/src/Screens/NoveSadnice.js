@@ -1,130 +1,120 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 
 const NoveSadnice = () => {
-  const [naziv, setNaziv] = useState('')
-  const [cijena, setCijena] = useState('')
-  const [slika, setSlika] = useState('')
-  const [tip, setTip] = useState('')
-  const [opis, setOpis] = useState('')
-  //   const [discount, setDiscount] = useState("");
+  const [naziv, setNaziv] = useState("");
+  const [cijena, setCijena] = useState("");
+  const [slika, setSlika] = useState("");
+  const [tip, setTip] = useState("");
+  const [opis, setOpis] = useState("");
 
-  let [data, setData] = useState()
+  let [data, setData] = useState();
   useEffect(() => {
-    fetch('http://localhost:5000/sadnica', {
-      method: 'GET',
+    fetch("http://localhost:5000/sadnica", {
+      method: "GET",
       headers: {
-        'Access-Control-Allow-Origin': 'null',
-        // Authorization: "Basic " + btoa(username + ":" + password),
+        "Access-Control-Allow-Origin": "null",
       },
-      mode: 'cors',
+      mode: "cors",
     })
       .then((response) => {
-        // if (!response.ok) {
-        //   Logging.error(`Did not get an ok. got: ${response.statusText}`);
-        // }
-        return response.json()
+        return response.json();
       })
-      .then((json) => setData(json)) //setData here
-    //  .catch((error) => {
-    //  Logging.error(`Error getting ad data: ${error.message}`);
-    //  }
-    //  )
-    //   .then(
-    //     (json) => console.log(json)
-    // localStorage.setItem("token", JSON.stringify(json.token))
-  }, [])
+      .then((json) => setData(json));
+  }, []);
   const clickHandler1 = () => {
-    console.log(data.naziv)
-  }
+    console.log(data.naziv);
+  };
   const submitHandler = (e) => {
-    e.preventDefault()
-    const data = { naziv, slika, tip, opis, cijena }
+    e.preventDefault();
+    const data = { naziv, slika, tip, opis, cijena };
 
-    fetch('http://localhost:5000/sadnica', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    fetch("http://localhost:5000/sadnica", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
-      mode: 'cors',
-    })
-    window.alert('You have added a new product called ' + naziv)
-    window.location.reload()
-  }
+      mode: "cors",
+    });
+    window.alert("Dodali ste novu sadnicu koja se zove " + naziv);
+    window.location.reload();
+  };
   const clickHandler = (sadnica) => {
-    console.log(sadnica.naziv)
-    if (window.confirm('Are you sure you want to remove ' + sadnica.naziv)) {
-      fetch('http://localhost:5000/sadnica', {
-        method: 'DELETE',
+    console.log(sadnica.naziv);
+    if (
+      window.confirm("Jeste li sigurni da želite ukloniti " + sadnica.naziv)
+    ) {
+      fetch("http://localhost:5000/sadnica", {
+        method: "DELETE",
         headers: new Headers({
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Methods': 'DELETE',
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Methods": "DELETE",
         }),
         body: JSON.stringify(sadnica),
-        mode: 'cors',
-      })
+        mode: "cors",
+      });
 
-      window.alert('You have removed ' + sadnica.naziv)
-      // window.location.reload();
+      window.alert("Uklonili ste " + sadnica.naziv);
+      window.location.reload();
     }
-  }
+  };
 
   return (
     <div>
-      <header className='block row center color'>
+      <header className="block row center color">
         <div>
           <h1>Dodavanje sadnica</h1>
         </div>
       </header>
-      <form className='form' onSubmit={submitHandler}>
+      <form className="form" onSubmit={submitHandler}>
         <div></div>
         <div>
-          <label htmlFor='naziv'>Naziv</label>
+          <label htmlFor="naziv">Naziv</label>
           <input
-            type='text'
-            id='naziv'
-            placeholder='Unesite naziv'
+            type="text"
+            id="naziv"
+            placeholder="Unesite naziv"
             required
             onChange={(e) => setNaziv(e.target.value)}
           />
         </div>
         <div>
-          <label htmlFor='slika'>Slika</label>
+          <label htmlFor="slika">Slika</label>
           <input
-            type='text'
-            id='slika'
-            placeholder='Unesite URL slike'
+            type="text"
+            id="slika"
+            placeholder="Unesite URL slike"
             required
             onChange={(e) => setSlika(e.target.value)}
           />
         </div>
         {
           <div>
-            <label htmlFor='price'>Price</label>
+            <label htmlFor="price">Price</label>
             <input
-              type='number'
-              id='price'
-              placeholder='Enter a price'
+              type="number"
+              id="price"
+              placeholder="Enter a price"
               required
               onChange={(e) => setCijena(e.target.value)}
             />
           </div>
         }
         <div>
-          <label htmlFor='tip'>Tip</label>
+          <label htmlFor="tip">Tip</label>
           <input
-            type='text'
-            id='tip'
-            placeholder='Unesite tip'
+            type="text"
+            id="tip"
+            placeholder="Unesite tip"
             required
             onChange={(e) => setTip(e.target.value)}
           />
         </div>
         <div>
-          <label htmlFor='opis'>Opis</label>
+          <label htmlFor="opis">Opis</label>
           <input
-            type='text'
-            id='opis'
-            placeholder='Unesite opis'
+            type="text"
+            id="opis"
+            placeholder="Unesite opis"
             onChange={(e) => setOpis(e.target.value)}
           />
         </div>
@@ -137,21 +127,21 @@ const NoveSadnice = () => {
             onChange={(e) => setDiscount(e.target.value)}
           />
         </div> */}
-        <button className='primary' type='submit'>
+        <button className="primary" type="submit">
           ADD
         </button>
         <div>
           <h1>Brisanje Sadnica</h1>
         </div>
-        <button className='primary' type='button' onClick={clickHandler1}>
+        <button className="primary" type="button" onClick={clickHandler1}>
           click
         </button>
         {data !== undefined
           ? data.Sadnice.map((sadnica) => (
               <div key={sadnica.id}>
                 <button
-                  type='button'
-                  className='promo'
+                  type="button"
+                  className="promo"
                   onClick={() => clickHandler(sadnica)}
                 >
                   {sadnica.naziv}
@@ -161,7 +151,7 @@ const NoveSadnice = () => {
           : null}
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default NoveSadnice
+export default NoveSadnice;

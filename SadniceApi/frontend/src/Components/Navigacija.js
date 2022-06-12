@@ -1,6 +1,4 @@
 import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const useAuth = () => {
@@ -13,7 +11,6 @@ const Navigacija = (props) => {
   let userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const isAuth = useAuth();
 
-  //   const dispatch = useDispatch();
   const signoutHandler = () => {
     localStorage.removeItem("userInfo");
     localStorage.removeItem("sadnica");

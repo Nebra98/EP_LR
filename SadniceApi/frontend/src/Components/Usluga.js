@@ -27,7 +27,9 @@ const Usluga = (props) => {
                     <h3>{product.naziv}</h3>
                   </Link>
                   <div>
-                    <button onClick={() => onAdd(product)}>Add To Cart</button>
+                    <button onClick={() => onAdd(product)}>
+                      Dodajte u korpu
+                    </button>
                   </div>
                 </div>
               ) : null}
