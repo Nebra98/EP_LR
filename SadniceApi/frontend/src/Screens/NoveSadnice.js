@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 const NoveSadnice = () => {
   const [naziv, setNaziv] = useState("");
-  //   const [price, setPrice] = useState("");
+  const [cijena, setCijena] = useState("");
   const [slika, setSlika] = useState("");
   const [tip, setTip] = useState("");
   const [opis, setOpis] = useState("");
@@ -34,13 +34,12 @@ const NoveSadnice = () => {
     // localStorage.setItem("token", JSON.stringify(json.token))
   }, []);
   const clickHandler1 = () => {
-    console.log(data);
-    console.log(JSON.stringify(data.Sadnice[0].naziv));
+    console.log(data.naziv);
   };
   const submitHandler = (e) => {
     e.preventDefault();
-    const data = { naziv, slika, tip, opis };
-    console.log(data);
+    const data = { naziv, slika, tip, opis, cijena };
+
     fetch("http://localhost:5000/sadnica", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -48,10 +47,10 @@ const NoveSadnice = () => {
       mode: "cors",
     });
     window.alert("You have added a new product called " + naziv);
-    // window.location.reload();
+    window.location.reload();
   };
   const clickHandler = (sadnica) => {
-    console.log(JSON.stringify(sadnica));
+    console.log(sadnica.naziv);
     if (window.confirm("Are you sure you want to remove " + sadnica.naziv)) {
       fetch("http://localhost:5000/sadnica", {
         method: "DELETE",
@@ -98,17 +97,18 @@ const NoveSadnice = () => {
             onChange={(e) => setSlika(e.target.value)}
           />
         </div>
-        {/* <div>
-          <label htmlFor="price">Price</label>
-          <input
-            type="number"
-            id="price"
-            placeholder="Enter a price"
-            required
-            onChange={(e) => setPrice(e.target.value)}
-          />
-        </div> */}
-
+        {
+          <div>
+            <label htmlFor="price">Price</label>
+            <input
+              type="number"
+              id="price"
+              placeholder="Enter a price"
+              required
+              onChange={(e) => setCijena(e.target.value)}
+            />
+          </div>
+        }
         <div>
           <label htmlFor="tip">Tip</label>
           <input
@@ -137,11 +137,9 @@ const NoveSadnice = () => {
             onChange={(e) => setDiscount(e.target.value)}
           />
         </div> */}
-
         <button className="primary" type="submit">
           ADD
         </button>
-
         <div>
           <h1>Brisanje Sadnica</h1>
         </div>

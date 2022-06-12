@@ -25,7 +25,7 @@ class Sadnica(db.Model):
     opis = Column(String(50))
     cijena = Column(Float)
 
-    def __init__(self,naziv,slika,tip,opis):
+    def __init__(self,naziv,slika,tip,opis,cijena):
         self.naziv = naziv
         self.slika = slika
         self.tip = tip
@@ -40,7 +40,8 @@ class Usluga(db.Model):
     cijena = Column(Float)
 
 
-    def __init__(self,naziv,slika,opis):
+
+    def __init__(self,naziv,slika,opis,cijena):
         self.naziv = naziv
         self.slika = slika
         self.opis = opis

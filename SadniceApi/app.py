@@ -13,7 +13,7 @@ from sqlalchemy import delete
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS #comment this on deployment
 
-# app = Flask(__name__, static_url_path='', static_folder='frontend/build')
+#app = Flask(__name__, static_url_path='', static_folder='frontend/build')
 CORS(app) #comment this on deployment
 @app.route('/register',methods=['POST'])
 def create_user():
@@ -50,7 +50,7 @@ def login():
         
         return jsonify({"token": token, "admin": admin, "naziv": naziv})
     
-@app.route('/sadnica',methods=['GET','POST','DELETE','PATCH'])
+@app.route('/sadnica',methods=['GET','POST','DELETE','PUT','OPTIONS'])
 def crud_sadnice():
     sadnica = request.get_json()
     if request.method == 'GET':
@@ -69,17 +69,22 @@ def crud_sadnice():
         return jsonify({'Sadnice' : output})
 
     elif request.method == 'POST':
-        nova_sadnica = models.Sadnica(naziv=sadnica["naziv"],slika=sadnica["slika"],tip=sadnica["tip"],opis=sadnica["opis"])
+        print(sadnica["naziv"])
+
+        nova_sadnica = models.Sadnica(naziv=sadnica["naziv"],slika=sadnica["slika"],tip=sadnica["tip"],opis=sadnica["opis"], cijena=sadnica["cijena"])
         db.session.add(nova_sadnica)
         db.session.commit()        
         return jsonify({"Poruka":"Sadnica dodana"})
 
     elif request.method == 'DELETE':
+        print(sadnica["naziv"])
+        response = jsonify({"Poruka":"Brisanje uspjesno"})
+        response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
         models.Sadnica.query.filter(models.Sadnica.naziv==sadnica["naziv"]).delete()    
         db.session.commit() 
-        return jsonify({"Poruka":"Brisanje uspjesno"})
 
-    elif request.method == 'PATCH':
+        return response
+    elif request.method == 'PUT':
         db.session.query(models.Sadnica).filter(models.Sadnica.naziv==sadnica["naziv"]).update({
             models.Sadnica.naziv : sadnica["naziv"],
             models.Sadnica.opis:sadnica["opis"],
@@ -91,7 +96,7 @@ def crud_sadnice():
     return jsonify({"Poruka":"Greska"})
 
 
-@app.route('/usluga',methods=['GET','POST','DELETE','PATCH'])
+@app.route('/usluga',methods=['GET','POST','DELETE','PUT'])
 def crud_usluga():
     usluga = request.get_json()
     if request.method == 'GET':
@@ -112,15 +117,15 @@ def crud_usluga():
         nova_usluga = models.Usluga(naziv=usluga["naziv"],slika=usluga["slika"],opis=usluga["opis"])
         db.session.add(nova_usluga)
         db.session.commit()        
-        return jsonify({"Poruka":"Sadnica dodana"})
+        return jsonify({"Poruka":"Usluga dodana"})
 
     elif request.method == 'DELETE':
         models.Usluga.query.filter(models.Usluga.naziv==usluga["naziv"]).delete()    
         db.session.commit() 
         return jsonify({"Poruka":"Brisanje uspjesno"})
 
-    elif request.method == 'PATCH':
-        db.session.query(models.Usluga).filter(models.Sadnica.naziv==usluga["naziv"]).update({
+    elif request.method == 'PUT':
+        db.session.query(models.Usluga).filter(models.Usluga.naziv==usluga["naziv"]).update({
             models.Usluga.naziv : usluga["naziv"],
             models.Usluga.opis:usluga["opis"],
             models.Usluga.slika:usluga["slika"],
@@ -128,7 +133,7 @@ def crud_usluga():
         db.session.commit()
         return jsonify({"Poruka":"Azuriranje uspjesno"})
     return jsonify({"Poruka":"Greska"})
-@app.route('/usluga_korisnik',methods=['GET','POST','DELETE','PATCH'])
+@app.route('/usluga_korisnik',methods=['GET','POST','DELETE'])
 @token_required
 def crud_usluga_korisnik(trenutni_korisnik):
     usluga_korisnik = request.get_json()
@@ -148,8 +153,7 @@ def crud_usluga_korisnik(trenutni_korisnik):
 
     elif request.method == 'POST':
         usluga_ID = db.session.query(models.Usluga).filter(models.Usluga.naziv==usluga_korisnik["naziv_usluge"]).first()
-        print(usluga_ID.naziv)
-        nova_usluga = models.Korisnik_Usluga(cijena=usluga_korisnik["cijena"],usluga_id=usluga_ID.id,korisnik_id=trenutni_korisnik.id)
+        nova_usluga = models.Korisnik_Usluga(cijena=usluga_ID.cijena,usluga_id=usluga_ID.id,korisnik_id=trenutni_korisnik.id)
         db.session.add(nova_usluga)
         db.session.commit()        
         return jsonify({"Poruka":"Usluga dodana"})
@@ -160,16 +164,7 @@ def crud_usluga_korisnik(trenutni_korisnik):
         db.session.commit() 
         return jsonify({"Poruka":"Brisanje uspjesno"})
 
-    elif request.method == 'PUT':
-        usluga_ID = models.Usluga.query.filter(models.Usluga.naziv==usluga_korisnik["naziv_usluge"]).first()
-
-        db.session.query(models.Korisnik_Usluga).filter(models.Sadnica.naziv==usluga_korisnik["id"]).update({
-            models.Korisnik_Usluga.cijena : usluga_korisnik["cijena"],
-            models.Korisnik_Usluga.korisnik_id:trenutni_korisnik.id,
-            models.Korisnik_Usluga.usluga_id: usluga_ID.id
-        })    
-        db.session.commit()
-        return jsonify({"Poruka":"Azuriranje uspjesno"})
+  
     return jsonify({"Poruka":"Greska"})
 @app.route('/sadnica_korisnik',methods=['GET','POST','DELETE','PATCH'])
 @token_required
@@ -191,7 +186,7 @@ def crud_sadnica_korisnik(trenutni_korisnik):
 
     elif request.method == 'POST':
         nova_sadnica = db.session.query(models.Sadnica).filter(models.Sadnica.naziv==sadnica_korisnik["naziv"]).first()
-        nova_usluga = models.Korisnik_Sadnica(cijena=sadnica_korisnik["cijena"],sadnica_id=nova_sadnica.id,korisnik_id=trenutni_korisnik.id)
+        nova_usluga = models.Korisnik_Sadnica(cijena=nova_sadnica.cijena,sadnica_id=nova_sadnica.id,korisnik_id=trenutni_korisnik.id)
         db.session.add(nova_usluga)
         db.session.commit()        
         return jsonify({"Poruka":"Sadnica dodana"})

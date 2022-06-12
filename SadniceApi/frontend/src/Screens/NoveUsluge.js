@@ -9,10 +9,10 @@ const NoveUsluge = () => {
 
   let [data, setData] = useState();
   useEffect(() => {
-    fetch("http://localhost:5000/usluga", {
+    fetch("https://localhost:5000/usluga", {
       method: "GET",
       headers: {
-        "Access-Control-Allow-Origin": "null",
+        "Access-Control-Allow-Origin": "*",
         // Authorization: "Basic " + btoa(username + ":" + password),
       },
       mode: "cors",
@@ -41,7 +41,10 @@ const NoveUsluge = () => {
 
     fetch("http://localhost:5000/usluga", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
       body: JSON.stringify(data),
       mode: "cors",
     });
@@ -54,6 +57,10 @@ const NoveUsluge = () => {
         method: "DELETE",
         body: usluga,
         mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
       });
 
       //   dispatch(deleteProduct(id));
