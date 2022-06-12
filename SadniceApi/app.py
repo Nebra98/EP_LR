@@ -71,7 +71,7 @@ def crud_sadnice():
         return jsonify({"Poruka":"Sadnica dodana"})
 
     elif request.method == 'DELETE':
-        models.Korisnik.query.filter(models.Sadnica.naziv==sadnica["naziv"]).delete()    
+        models.Sadnica.query.filter(models.Sadnica.naziv==sadnica["naziv"]).delete()    
         db.session.commit() 
         return jsonify({"Poruka":"Brisanje uspjesno"})
 
