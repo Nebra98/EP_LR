@@ -11,10 +11,10 @@ from init import db,app
 from utilities import token_required
 from sqlalchemy import delete
 from flask_restful import Api, Resource, reqparse
-from flask_cors import CORS #comment this on deployment
+#from flask_cors import CORS #comment this on deployment
 
-app = Flask(__name__, static_url_path='', static_folder='frontend/build')
-CORS(app) #comment this on deployment
+#app = Flask(__name__, static_url_path='', static_folder='frontend/build')
+#CORS(app) #comment this on deployment
 @app.route('/register',methods=['POST'])
 def create_user():
     data = request.get_json()
@@ -35,6 +35,7 @@ def delete_user(korisnicko_ime):
 @app.route('/login',methods=['GET'])
 def login():
     auth = request.authorization
+    print(auth.username)
     korisnik = models.Korisnik.query.filter_by(korisnicko_ime = auth.username).first()
     if not korisnik:
         return jsonify({"Poruka":"Pogreska"})
@@ -107,7 +108,7 @@ def crud_usluga():
         nova_usluga = models.Usluga(naziv=usluga["naziv"],slika=usluga["slika"],opis=usluga["opis"])
         db.session.add(nova_usluga)
         db.session.commit()        
-        return jsonify({"Poruka":"Sadnica dodana"})
+        return jsonify({"Poruka":"Usluga dodana"})
 
     elif request.method == 'DELETE':
         models.Usluga.query.filter(models.Usluga.naziv==usluga["naziv"]).delete()    
@@ -115,7 +116,7 @@ def crud_usluga():
         return jsonify({"Poruka":"Brisanje uspjesno"})
 
     elif request.method == 'PATCH':
-        db.session.query(models.Usluga).filter(models.Sadnica.naziv==usluga["naziv"]).update({
+        db.session.query(models.Usluga).filter(models.Usluga.naziv==usluga["naziv"]).update({
             models.Usluga.naziv : usluga["naziv"],
             models.Usluga.opis:usluga["opis"],
             models.Usluga.slika:usluga["slika"],
@@ -186,7 +187,7 @@ def crud_sadnica_korisnik(trenutni_korisnik):
 
     elif request.method == 'POST':
         nova_sadnica = db.session.query(models.Sadnica).filter(models.Sadnica.naziv==sadnica_korisnik["naziv"]).first()
-        nova_usluga = models.Korisnik_Sadnica(cijena=sadnica_korisnik["cijena"],sadnica_id=nova_sadnica.id,korisnik_id=trenutni_korisnik.id)
+        nova_usluga = models.Korisnik_Sadnica(cijena=nova_sadnica.cijena,sadnica_id=nova_sadnica.id,korisnik_id=trenutni_korisnik.id)
         db.session.add(nova_usluga)
         db.session.commit()        
         return jsonify({"Poruka":"Sadnica dodana"})

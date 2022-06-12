@@ -23,24 +23,29 @@ class Sadnica(db.Model):
     slika = Column(String(50))
     tip = Column(String(50))
     opis = Column(String(50))
+    cijena = Column(Float)
 
-    def __init__(self,naziv,slika,tip,opis):
+    def __init__(self,naziv,slika,tip,opis,cijena):
         self.naziv = naziv
         self.slika = slika
         self.tip = tip
         self.opis = opis
+        self.cijena = cijena
 class Usluga(db.Model):
 
     id = Column(Integer,primary_key=True)
     naziv = Column(String(50))
     slika = Column(String(50))
     opis = Column(String(50))
+    cijena = Column(Float)
 
 
-    def __init__(self,naziv,slika,opis):
+
+    def __init__(self,naziv,slika,opis,cijena):
         self.naziv = naziv
         self.slika = slika
         self.opis = opis
+        self.cijena = cijena
 class Korisnik_Usluga(db.Model):
     id = Column(Integer,primary_key=True)
     cijena = Column(Float)
