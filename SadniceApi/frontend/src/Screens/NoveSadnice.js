@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Navigacija from "../Components/Navigacija";
 
 const NoveSadnice = () => {
   const [naziv, setNaziv] = useState("");
@@ -21,9 +22,7 @@ const NoveSadnice = () => {
       })
       .then((json) => setData(json));
   }, []);
-  const clickHandler1 = () => {
-    console.log(data.naziv);
-  };
+
   const submitHandler = (e) => {
     e.preventDefault();
     const data = { naziv, slika, tip, opis, cijena };
@@ -59,66 +58,70 @@ const NoveSadnice = () => {
   };
 
   return (
-    <div>
-      <header className="block row center color">
-        <div>
-          <h1>Dodavanje sadnica</h1>
-        </div>
-      </header>
-      <form className="form" onSubmit={submitHandler}>
-        <div></div>
-        <div>
-          <label htmlFor="naziv">Naziv</label>
-          <input
-            type="text"
-            id="naziv"
-            placeholder="Unesite naziv"
-            required
-            onChange={(e) => setNaziv(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="slika">Slika</label>
-          <input
-            type="text"
-            id="slika"
-            placeholder="Unesite URL slike"
-            required
-            onChange={(e) => setSlika(e.target.value)}
-          />
-        </div>
-        {
+    <div className="novesadnice">
+      <div className="opacity">
+        <Navigacija></Navigacija>
+      </div>
+      <div className="block opacity1">
+        <header className="block row center color">
           <div>
-            <label htmlFor="price">Price</label>
+            <h1>Dodavanje sadnica</h1>
+          </div>
+        </header>
+        <form className="form" onSubmit={submitHandler}>
+          <div></div>
+          <div>
+            <label htmlFor="naziv">Naziv</label>
             <input
-              type="number"
-              id="price"
-              placeholder="Enter a price"
+              type="text"
+              id="naziv"
+              placeholder="Unesite naziv"
               required
-              onChange={(e) => setCijena(e.target.value)}
+              onChange={(e) => setNaziv(e.target.value)}
             />
           </div>
-        }
-        <div>
-          <label htmlFor="tip">Tip</label>
-          <input
-            type="text"
-            id="tip"
-            placeholder="Unesite tip"
-            required
-            onChange={(e) => setTip(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="opis">Opis</label>
-          <input
-            type="text"
-            id="opis"
-            placeholder="Unesite opis"
-            onChange={(e) => setOpis(e.target.value)}
-          />
-        </div>
-        {/* <div>
+          <div>
+            <label htmlFor="slika">Slika</label>
+            <input
+              type="text"
+              id="slika"
+              placeholder="Unesite URL slike"
+              required
+              onChange={(e) => setSlika(e.target.value)}
+            />
+          </div>
+          {
+            <div>
+              <label htmlFor="price">Price</label>
+              <input
+                type="number"
+                id="price"
+                placeholder="Enter a price"
+                required
+                onChange={(e) => setCijena(e.target.value)}
+              />
+            </div>
+          }
+          <div>
+            <label htmlFor="tip">Tip</label>
+            <input
+              type="text"
+              id="tip"
+              placeholder="Unesite tip"
+              required
+              onChange={(e) => setTip(e.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor="opis">Opis</label>
+            <input
+              type="text"
+              id="opis"
+              placeholder="Unesite opis"
+              onChange={(e) => setOpis(e.target.value)}
+            />
+          </div>
+          {/* <div>
           <label htmlFor="name">Discount</label>
           <input
             type="number"
@@ -127,29 +130,28 @@ const NoveSadnice = () => {
             onChange={(e) => setDiscount(e.target.value)}
           />
         </div> */}
-        <button className="primary" type="submit">
-          ADD
-        </button>
-        <div>
-          <h1>Brisanje Sadnica</h1>
-        </div>
-        <button className="primary" type="button" onClick={clickHandler1}>
-          click
-        </button>
-        {data !== undefined
-          ? data.Sadnice.map((sadnica) => (
-              <div key={sadnica.id}>
-                <button
-                  type="button"
-                  className="promo"
-                  onClick={() => clickHandler(sadnica)}
-                >
-                  {sadnica.naziv}
-                </button>
-              </div>
-            ))
-          : null}
-      </form>
+          <button className="primary" type="submit">
+            ADD
+          </button>
+          <div>
+            <h1>Brisanje Sadnica</h1>
+          </div>
+
+          {data !== undefined
+            ? data.Sadnice.map((sadnica) => (
+                <div key={sadnica.id}>
+                  <button
+                    type="button"
+                    className="promo"
+                    onClick={() => clickHandler(sadnica)}
+                  >
+                    {sadnica.naziv}
+                  </button>
+                </div>
+              ))
+            : null}
+        </form>
+      </div>
     </div>
   );
 };

@@ -22,14 +22,14 @@ const Navigacija = (props) => {
     <header className="block row center color">
       <div>
         <a href="/">
-          <h1>HOME</h1>
+          <h1>Početna stranica</h1>
         </a>
       </div>
       <div>
         <Link to="/korpa">Korpa</Link>{" "}
         <div className="dropdown space">
           <Link to="#">
-            Shop <i className="fa fa-caret-down"></i>{" "}
+            Trgovina <i className="fa fa-caret-down"></i>{" "}
           </Link>
           <ul className="dropdown-content">
             <li>

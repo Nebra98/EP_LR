@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import Navigacija from "../Components/Navigacija";
 
 const Signin = (props) => {
   const navigate = useNavigate();
@@ -35,48 +36,53 @@ const Signin = (props) => {
   }, [navigate, redirect, userInfo]);
 
   return (
-    <div>
-      <form className="form" onSubmit={submitHandler}>
-        <div>
-          <h1>Sign In</h1>
-        </div>
-
-        <div>
-          <label htmlFor="username">Email adress</label>
-          <input
-            type="text"
-            id="username"
-            placeholder="Enter username"
-            required
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Enter password"
-            required
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div>
-          <label />
-          <button className="primary" type="submit">
-            Sign In
-          </button>
-        </div>
-        <div>
-          <label />
+    <div className="prijava">
+      <div className="opacity">
+        <Navigacija></Navigacija>
+      </div>
+      <div className="block opacity1">
+        <form className="form" onSubmit={submitHandler}>
           <div>
-            New customer?{" "}
-            <Link to={`/register?redirect=${redirect}`}>
-              Create you account
-            </Link>
+            <h1>Prijava</h1>
           </div>
-        </div>
-      </form>
+
+          <div>
+            <label htmlFor="username">Korisničko ime</label>
+            <input
+              type="text"
+              id="username"
+              placeholder="Unesite korisničko ime"
+              required
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor="password">Šifra</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Unesite šifru"
+              required
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div>
+            <label />
+            <button className="primary" type="submit">
+              Prijava
+            </button>
+          </div>
+          <div>
+            <label />
+            <div>
+              Novi korisnik?{" "}
+              <Link to={`/register?redirect=${redirect}`}>
+                Napravite svoj račun
+              </Link>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MainUsluga from "../Components/MainUsluga";
+import Navigacija from "../Components/Navigacija";
 const ShopUsluga = () => {
   const uslugaLoad = JSON.parse(localStorage.getItem("usluga" || "[]"));
 
@@ -30,8 +31,12 @@ const ShopUsluga = () => {
   let [search, setSearch] = useState("");
 
   return (
-    <div>
-      <div className="box">
+    <div className="usluge">
+      <div className="opacity">
+        <Navigacija></Navigacija>
+      </div>
+
+      <div className="box opacity1">
         <input
           className="search"
           type="text"
@@ -40,7 +45,9 @@ const ShopUsluga = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-      <MainUsluga searchName={search} onAdd={onAdd}></MainUsluga>
+      <div className="opacity1">
+        <MainUsluga searchName={search} onAdd={onAdd}></MainUsluga>
+      </div>
     </div>
   );
 };

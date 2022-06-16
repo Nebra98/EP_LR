@@ -21,8 +21,8 @@ const MainSadnica = (props) => {
 
   return (
     <main className="block col-2">
-      <h2>Products</h2>
-      <div className="row">
+      <h2>Sadnice</h2>
+      <div>
         <Sadnica searchName={searchName} onAdd={onAdd} product={data}></Sadnica>
       </div>
     </main>

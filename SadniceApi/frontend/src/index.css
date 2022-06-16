@@ -59,7 +59,7 @@ input {
 }
 
 .dropdown-content {
-  position: absolute;
+  position: fixed;
   display: none;
   right: 0;
   min-width: 12rem;
@@ -104,23 +104,24 @@ li {
 /* Table */
 
 .table {
-  width: 100%;
+  width: 96vw;
   border-collapse: collapse;
 }
 
-.table tbody tr:nth-of-type(odd) {
+/* .table tbody tr:nth-of-type(odd) {
   background-color: #f4f4f4;
-}
+} */
 
 .table td,
 .table th {
-  text-align: left;
-  border: 0.1rem solid #e4e4e4;
+  /* text-align: left; */
+  /* border: 0.4rem solid #e4e4e4; */
+  border: 0.2rem solid #e0e0e0;
   padding: 0.5rem;
 }
 
 .table button {
-  margin: 0 0.2rem;
+  margin: 3px;
 }
 
 .product {
@@ -128,9 +129,9 @@ li {
   padding-top: 15px;
 }
 
-th {
+/* th {
   display: block;
-}
+} */
 
 .orderHistory {
   display: inline;
@@ -153,14 +154,169 @@ th {
 }
 
 tr {
-  width: 25%
+  width: 25%;
 }
 
-td {
+/* td {
   width: 92.1%;
   color: black;
-}
+} */
 
 .none {
   display: none;
+}
+
+.size{
+  width: 10vw;
+}
+
+.table tbody tr:nth-of-type(odd) {
+  background-color: #f4f4f4;
+}
+/* 
+.table {
+  width: 95vw;
+  border-collapse: collapse;
+}
+.table td,
+.table th {
+  text-align: left;
+  border: 0.1rem solid #e4e4e4;
+  padding: 0.5rem;
+}
+.table button {
+  margin: 0 0.2rem;
+}
+*/
+td{
+  height: 150px;
+}
+.ime-td{
+  width: 35%;
+  height: 50px;
+}
+.opis-td{
+  width: 65%;
+  height: 50px;
+} 
+.slika{
+  width: 20%;
+  vertical-align: middle;
+}
+.naziv{
+  text-align: center;
+  vertical-align: middle;
+  width: 80%;
+}
+.opis{
+  vertical-align: middle;
+  width: 80%;
+}
+.gumb{
+  vertical-align: middle;
+  width: 20%;
+}
+.button{
+    background-color: #4CAF50;
+    width: 90%;
+    margin: 5%;
+      border: none;
+      color: white;
+      padding: 10px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      /* opacity: 100%; */
+}
+.home{
+  height: 100vh;
+  background-image: url( https://img.halooglasi.com/slike/oglasi/Thumbs/210730/l/formiranje-travnatih-povrsina-5425636876597-71796698212.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* margin-top: -10px; */
+  overflow: auto;
+}
+.basket{
+  background-image: url(https://media.product.which.co.uk/prod/images/original/gm-38735fd7-e79e-473a-976b-3af839bc0d57-maintidy-garden.jpeg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: -10px;
+  padding-top: 10px;
+  height: 100vh;
+  overflow: auto;
+}
+.opacity{
+  position: sticky;
+  z-index: 1;
+  margin-top: 10px;
+  opacity: 80%;
+}
+.opacity1{
+  /* position: fixed; */
+  opacity: 90%;
+  /* z-index: -1; */
+}
+.sadnice{
+  background-image: url(https://www.rasadnik-milic.hr/wp-content/uploads/2017/02/vo%C4%87njak_rasadnik_mili%C4%87.jpg);
+background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: -10px;
+  padding-top: 10px;
+  height: 100vh;
+  overflow: auto;
+}
+.usluge{
+  background-image: url(https://media.mojtrg.rs/Image/7a22faab165c4a1287148afb9a1ce9a9/20210311/false/false/1280/960/usluzno-kosenje-trave-trimerom-pancevo.jpeg?noLogo=true);
+  background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: -10px;
+    padding-top: 10px;
+    height: 100vh;
+  overflow: auto;
+}
+.povijest{
+  background-image: url(https://sandinmysuitcase.com/wp-content/uploads/2020/06/Butchart-Gardens.jpg);
+  background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: -10px;
+    padding-top: 10px;
+    height: 100vh;
+  overflow: auto;
+}
+.prijava{
+  background-image: url(https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/claude-monets-house-and-gardens-in-giverny-france-news-photo-1042013294-1562610151.jpg?crop=0.668xw:1.00xh;0.224xw,0&resize=640:*);
+  background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: -10px;
+    padding-top: 10px;
+    height: 100vh;
+  overflow: auto;
+}
+.registracija{
+  background-image: url(https://i.pinimg.com/736x/c9/ce/ac/c9ceac9c64edfbb08ee96d06a0553be2.jpg);
+  background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: -10px;
+    padding-top: 10px;
+    height: 100vh;
+  overflow: auto;
+}
+.noveusluge{
+  background-image: url(https://i.pinimg.com/564x/f6/4e/89/f64e89171ba1212a1e2410f350c184e8.jpg);
+  background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: -10px;
+    padding-top: 10px;
+    height: 100vh;
+  overflow: auto;
+}
+.novesadnice{
+  background-image: url(https://i.pinimg.com/originals/39/88/5f/39885f7f51be0c6b4486082a66cfe91d.jpg);
+    background-repeat: no-repeat;
+      background-size: cover;
+      margin-top: -10px;
+      padding-top: 10px;
+      height: 100vh;
+  overflow: auto;
 }

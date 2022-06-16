@@ -6,15 +6,17 @@ import Register from "../Screens/Register";
 import NoveSadnice from "../Screens/NoveSadnice";
 import NoveUsluge from "../Screens/NoveUsluge";
 import Basket from "../Screens/Basket";
-import Navigacija from "./Navigacija";
+// import Navigacija from "./Navigacija";
 import ShopSadnica from "../Screens/ShopSadnica";
 import ShopUsluga from "../Screens/ShopUsluga";
 import Povijest from "../Screens/Povijest";
 import ProtectedRouters from "./ProtectedRouters";
+import Sadnica from "../Screens/Sadnica";
+import Usluga from "../Screens/Usluga";
 const index = () => {
   return (
     <Router>
-      <Navigacija></Navigacija>
+      <Routes></Routes>
       <Routes>
         <Route exacth path="/" element={<Home />} />
         <Route path="/signin" element={<Signin />} />
@@ -31,8 +33,8 @@ const index = () => {
 
         <Route path="/korpa" element={<Basket />} />
 
-        {/* <Route path="/sadnica/:id" element={<Sadnica />} /> */}
-        {/* <Route path="/usluga/:id" element={<Usluga />} /> */}
+        <Route path="/sadnica/:id" element={<Sadnica />} />
+        <Route path="/usluga/:id" element={<Usluga />} />
       </Routes>
     </Router>
   );

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import Navigacija from "../Components/Navigacija";
 
 const Basket = (props) => {
   const uslugaLoad = JSON.parse(localStorage.getItem("usluga" || "[]"));
@@ -132,101 +133,106 @@ const Basket = (props) => {
   };
 
   return (
-    <div className="block col-1">
-      <form className="form">
-        <h2>Korpa</h2>
-        <div>
-          {sadnica.length === 0 && usluga.length === 0 && (
-            <div>Korpa je prazna</div>
-          )}
-          {(sadnica.length !== 0 || usluga.length !== 0) && (
-            <>
-              {sadnica.length !== 0 && (
-                <>
-                  <h2>Sadnice</h2>
+    <div className="basket">
+      <div className="opacity">
+        <Navigacija></Navigacija>
+      </div>
+      <div className="block col-1 opacity1">
+        <form className="form">
+          <h2>Korpa</h2>
+          <div>
+            {sadnica.length === 0 && usluga.length === 0 && (
+              <div>Korpa je prazna</div>
+            )}
+            {(sadnica.length !== 0 || usluga.length !== 0) && (
+              <>
+                {sadnica.length !== 0 && (
+                  <>
+                    <h2>Sadnice</h2>
 
-                  {sadnica.map((item) => (
-                    <div key={item.id} className="row">
-                      <div className="col-2">{item.naziv}</div>
-                      <div className="col-2">
-                        <button
-                          type="button"
-                          onClick={() => onRemoveSadnica(item)}
-                          className="remove"
-                        >
-                          -
-                        </button>{" "}
-                        <button
-                          type="button"
-                          onClick={() => onAddSadnica(item)}
-                          className="add"
-                        >
-                          +
-                        </button>
-                      </div>
+                    {sadnica.map((item) => (
+                      <div key={item.id} className="row">
+                        <div className="col-2">{item.naziv}</div>
+                        <div className="col-2">
+                          <button
+                            type="button"
+                            onClick={() => onRemoveSadnica(item)}
+                            className="remove"
+                          >
+                            -
+                          </button>{" "}
+                          <button
+                            type="button"
+                            onClick={() => onAddSadnica(item)}
+                            className="add"
+                          >
+                            +
+                          </button>
+                        </div>
 
-                      <div className="col-2 text-right">
-                        {item.broj} x {Number(item.cijena).toFixed(2)} €
+                        <div className="col-2 text-right">
+                          {item.broj} x {Number(item.cijena).toFixed(2)} €
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </>
-              )}
-              {usluga.length !== 0 && (
-                <>
-                  <h2>Usluge</h2>
-                  {usluga.map((item) => (
-                    <div key={item.id} className="row">
-                      <div className="col-2">{item.naziv}</div>
-                      <div className="col-2">
-                        <button
-                          type="button"
-                          onClick={() => onRemoveUsluga(item)}
-                          className="remove"
-                        >
-                          -
-                        </button>{" "}
-                        {/* <button
+                    ))}
+                  </>
+                )}
+                {usluga.length !== 0 && (
+                  <>
+                    <h2>Usluge</h2>
+                    {usluga.map((item) => (
+                      <div key={item.id} className="row">
+                        <div className="col-2">{item.naziv}</div>
+                        <div className="col-2">
+                          <button
+                            type="button"
+                            onClick={() => onRemoveUsluga(item)}
+                            className="remove"
+                          >
+                            -
+                          </button>{" "}
+                          {/* <button
                           type="button"
                           onClick={() => onAddUsluga(item)}
                           className="add"
                         >
                           +
                         </button> */}
+                        </div>
+
+                        <div className="col-2 text-right">
+                          {item.broj} x {Number(item.cijena).toFixed(2)} €
+                        </div>
                       </div>
+                    ))}
+                  </>
+                )}
 
-                      <div className="col-2 text-right">
-                        {item.broj} x {Number(item.cijena).toFixed(2)} €
-                      </div>
-                    </div>
-                  ))}
-                </>
-              )}
-
-              <div className="row">
-                <div className="col-2">
-                  <strong>Total Price</strong>
+                <div className="row">
+                  <div className="col-2">
+                    <strong>Ukupna cijena</strong>
+                  </div>
+                  <div className="col-1 text-right">
+                    <div className="none"></div>
+                    <strong>{totalPrice.toFixed(2)} €</strong>
+                  </div>
                 </div>
-                <div className="col-1 text-right">
-                  <div className="none"></div>
-                  <strong>{totalPrice.toFixed(2)} €</strong>
-                </div>
-              </div>
 
-              <div className="row">
-                <button
-                  type="button"
-                  className="primary"
-                  disabled={sadnica.length === 0 && usluga.length === 0}
-                  onClick={submitHandler}
-                >
-                  Checkout
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-      </form>
+                <div className="row">
+                  <button
+                    type="button"
+                    className="button"
+                    disabled={sadnica.length === 0 && usluga.length === 0}
+                    onClick={submitHandler}
+                  >
+                    Naruči
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

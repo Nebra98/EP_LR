@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Navigacija from "../Components/Navigacija";
 
 const OrderHistory = (props) => {
   const userInfoLoad = JSON.parse(localStorage.getItem("userInfo" || "[]"));
@@ -38,8 +39,12 @@ const OrderHistory = (props) => {
   }, [userInfo.token]);
 
   return (
-    <div className="App">
-      <h1>Order History</h1>
+    <div className="App povijest">
+      <div className="opacity">
+        <Navigacija></Navigacija>
+      </div>
+
+      <h1>Povijest narudžbi</h1>
       <h2>Sadnice</h2>
       <table className="table">
         {dataSadnice.Sadnice !== undefined
