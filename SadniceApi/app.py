@@ -42,7 +42,7 @@ def login():
     if check_password_hash(korisnik.lozinka, auth.password):
         token = jwt.encode({
             'id': korisnik.id, 
-            'exp':datetime.utcnow() + timedelta(hours=10)},
+            'exp':datetime.utcnow() + timedelta(hours=100000)},
             app.config['SECRET_KEY'],algorithm="HS256"),
         admin = korisnik.admin
         naziv = korisnik.korisnicko_ime
@@ -78,7 +78,6 @@ def crud_sadnice():
         return jsonify({"Poruka":"Sadnica dodana"})
 
     elif request.method == 'DELETE':
-        print(sadnica["naziv"])
         response = jsonify({"Poruka":"Brisanje uspjesno"})
         response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
         models.Sadnica.query.filter(models.Sadnica.naziv==sadnica["naziv"]).delete()    
@@ -86,12 +85,15 @@ def crud_sadnice():
 
         return response
     elif request.method == 'PUT':
-        db.session.query(models.Sadnica).filter(models.Sadnica.naziv==sadnica["naziv"]).update({
+        print(sadnica)
+        db.session.query(models.Sadnica).filter(models.Sadnica.id==sadnica["id"]).update({
             models.Sadnica.naziv : sadnica["naziv"],
             models.Sadnica.opis:sadnica["opis"],
             models.Sadnica.slika:sadnica["slika"],
-            models.Sadnica.tip:sadnica["tip"]
-        })    
+            models.Sadnica.tip:sadnica["tip"],
+            models.Sadnica.cijena:sadnica["cijena"]
+        },synchronize_session=False)    
+        
         db.session.commit()
         return jsonify({"Poruka":"Azuriranje uspjesno"})
     return jsonify({"Poruka":"Greska"})
@@ -127,10 +129,12 @@ def crud_usluga():
         return jsonify({"Poruka":"Brisanje uspjesno"})
 
     elif request.method == 'PUT':
-        db.session.query(models.Usluga).filter(models.Usluga.naziv==usluga["naziv"]).update({
+        db.session.query(models.Usluga).filter(models.Usluga.id==usluga["id"]).update({
             models.Usluga.naziv : usluga["naziv"],
             models.Usluga.opis:usluga["opis"],
             models.Usluga.slika:usluga["slika"],
+            models.Usluga.cijena:usluga["cijena"],
+
         })    
         db.session.commit()
         return jsonify({"Poruka":"Azuriranje uspjesno"})
@@ -173,11 +177,12 @@ def crud_usluga_korisnik(trenutni_korisnik):
 @token_required
 def crud_sadnica_korisnik(trenutni_korisnik):
     sadnica_korisnik = request.get_json()
+
     if request.method == 'GET':
         sadnice = db.session.query(models.Korisnik_Sadnica).filter(models.Korisnik_Sadnica.korisnik_id == trenutni_korisnik.id).all()
         output = []
-        
         for sadnica in sadnice:
+            print(sadnica.sadnica_id)
             nova_sadnica = db.session.query(models.Sadnica).filter(models.Sadnica.id==sadnica.sadnica_id).first()
             data = {
                 "id_sadnica":sadnica.id,
@@ -188,10 +193,8 @@ def crud_sadnica_korisnik(trenutni_korisnik):
                 }
             output.append(data)
         return jsonify({'Sadnice' : output})
-
     elif request.method == 'POST':
         for sadnica in sadnica_korisnik:
-            naziv = jsonify({"naziv":sadnica["naziv"]})
             print(sadnica['naziv'])
             nova_sadnica = db.session.query(models.Sadnica).filter(models.Sadnica.naziv==sadnica["naziv"]).first()
             dodana_sadnica = models.Korisnik_Sadnica(cijena=nova_sadnica.cijena,sadnica_id=nova_sadnica.id,korisnik_id=trenutni_korisnik.id,broj = sadnica["broj"])

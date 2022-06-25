@@ -1,46 +1,48 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 const useAuth = () => {
-  let user = JSON.parse(localStorage.getItem("userInfo"));
+  let user = JSON.parse(localStorage.getItem('userInfo'))
 
-  return user && user.admin;
-};
+  return user && user.admin
+}
 
 const Usluga = (props) => {
-  const isAuth = useAuth();
-
-  const { searchName, onAdd, product } = props;
+  const isAuth = useAuth()
+  const navigate = useNavigate()
+  const { searchName, onAdd, product } = props
 
   const obrisi = (usluga) => {
-    if (window.confirm("Jeste li sigurni da želite ukloniti " + usluga.naziv)) {
-      fetch("http://localhost:5000/usluga", {
-        method: "DELETE",
+    if (window.confirm('Jeste li sigurni da želite ukloniti ' + usluga.naziv)) {
+      fetch('http://localhost:5000/usluga', {
+        method: 'DELETE',
         headers: new Headers({
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Methods": "DELETE",
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Methods': 'DELETE',
         }),
         body: JSON.stringify(usluga),
-        mode: "cors",
-      });
+        mode: 'cors',
+      })
 
-      window.alert("Uklonili ste " + usluga.naziv);
-      window.location.reload();
+      window.alert('Uklonili ste ' + usluga.naziv)
+      window.location.reload()
     }
-  };
+  }
 
-  const uredi = (usluga) => {};
+  const uredi = (usluga) => {
+    navigate(`../../uredi/usluga/${usluga.id}`, { state: usluga })
+  }
 
   return (
     <div>
-      <table className="table">
+      <table className='table'>
         <thead>
           <tr>
-            <td className="ime-td">
+            <td className='ime-td'>
               <b>Ime usluge</b>
             </td>
-            <td className="opis-td">
+            <td className='opis-td'>
               <b>Opis usluge</b>
             </td>
           </tr>
@@ -56,18 +58,18 @@ const Usluga = (props) => {
                       .includes(searchName.toLowerCase()) ? (
                       // <div className="product ime-td">
                       <tr>
-                        <td className="slika">
+                        <td className='slika'>
                           {/* <span> */}
                           <Link to={`/usluga/${product.id}`}>
                             <img
-                              className="size"
+                              className='size'
                               src={product.slika}
                               alt={product.naziv}
                             />
                           </Link>
                           {/* </span> */}
                         </td>
-                        <td className="naziv">
+                        <td className='naziv'>
                           {/* <div> */}
                           <Link to={`/usluga/${product.id}`}>
                             <h3>{product.naziv}</h3>
@@ -89,19 +91,19 @@ const Usluga = (props) => {
                       .toLowerCase()
                       .includes(searchName.toLowerCase()) ? (
                       <tr>
-                        <td className="opis">
+                        <td className='opis'>
                           <h3>{product.opis}</h3>
                         </td>
-                        <td className="gumb">
+                        <td className='gumb'>
                           <button
-                            className="button"
+                            className='button'
                             onClick={() => onAdd(product)}
                           >
                             Dodajte u korpu
                           </button>
                           {isAuth ? (
                             <button
-                              className="button"
+                              className='button'
                               onClick={() => obrisi(product)}
                             >
                               Obriši
@@ -110,10 +112,12 @@ const Usluga = (props) => {
 
                           {isAuth ? (
                             <button
-                              className="button"
+                              className='button'
                               onClick={() => uredi(product)}
                             >
+                              {/* <Link to={`../../uredi/usluga/${product.id}`}> */}
                               Uredi
+                              {/* </Link> */}
                             </button>
                           ) : null}
                         </td>
@@ -156,6 +160,6 @@ const Usluga = (props) => {
     //         </div>
     //       ))}
     // </div>
-  );
-};
-export default Usluga;
+  )
+}
+export default Usluga

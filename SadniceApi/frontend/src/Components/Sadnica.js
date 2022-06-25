@@ -1,45 +1,48 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 const useAuth = () => {
-  let user = JSON.parse(localStorage.getItem("userInfo"));
+  let user = JSON.parse(localStorage.getItem('userInfo'))
 
-  return user && user.admin;
-};
+  return user && user.admin
+}
 
 const Sadnica = (props) => {
-  const isAuth = useAuth();
+  const isAuth = useAuth()
+  const navigate = useNavigate()
 
-  const { searchName, onAdd, product } = props;
+  const { searchName, onAdd, product } = props
   const obrisi = (sadnica) => {
     if (
-      window.confirm("Jeste li sigurni da želite ukloniti " + sadnica.naziv)
+      window.confirm('Jeste li sigurni da želite ukloniti ' + sadnica.naziv)
     ) {
-      fetch("http://localhost:5000/sadnica", {
-        method: "DELETE",
+      fetch('http://localhost:5000/sadnica', {
+        method: 'DELETE',
         headers: new Headers({
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Methods": "DELETE",
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Methods': 'DELETE',
         }),
         body: JSON.stringify(sadnica),
-        mode: "cors",
-      });
+        mode: 'cors',
+      })
 
-      window.alert("Uklonili ste " + sadnica.naziv);
-      window.location.reload();
+      window.alert('Uklonili ste ' + sadnica.naziv)
+      window.location.reload()
     }
-  };
-  const uredi = (sadnica) => {};
+  }
+  const uredi = (sadnica) => {
+    navigate(`../../uredi/sadnica/${sadnica.id}`, { state: sadnica })
+  }
   return (
     <div>
-      <table className="table">
+      <table className='table'>
         <thead>
           <tr>
-            <td className="ime-td">
+            <td className='ime-td'>
               <b>Ime sadnice</b>
             </td>
-            <td className="opis-td">
+            <td className='opis-td'>
               <b>Opis sadnice</b>
             </td>
           </tr>
@@ -55,18 +58,18 @@ const Sadnica = (props) => {
                       .includes(searchName.toLowerCase()) ? (
                       // <div className="product ime-td">
                       <tr>
-                        <td className="slika">
+                        <td className='slika'>
                           {/* <span> */}
                           <Link to={`/sadnica/${product.id}`}>
                             <img
-                              className="size"
+                              className='size'
                               src={product.slika}
                               alt={product.naziv}
                             />
                           </Link>
                           {/* </span> */}
                         </td>
-                        <td className="naziv">
+                        <td className='naziv'>
                           {/* <div> */}
                           <Link to={`/sadnica/${product.id}`}>
                             <h3>{product.naziv}</h3>
@@ -88,19 +91,19 @@ const Sadnica = (props) => {
                       .toLowerCase()
                       .includes(searchName.toLowerCase()) ? (
                       <tr>
-                        <td className="opis">
+                        <td className='opis'>
                           <h3>{product.opis}</h3>
                         </td>
-                        <td className="gumb">
+                        <td className='gumb'>
                           <button
-                            className="button"
+                            className='button'
                             onClick={() => onAdd(product)}
                           >
                             Dodajte u korpu
                           </button>
                           {isAuth ? (
                             <button
-                              className="button"
+                              className='button'
                               onClick={() => obrisi(product)}
                             >
                               Obriši
@@ -109,7 +112,7 @@ const Sadnica = (props) => {
 
                           {isAuth ? (
                             <button
-                              className="button"
+                              className='button'
                               onClick={() => uredi(product)}
                             >
                               Uredi
@@ -124,6 +127,6 @@ const Sadnica = (props) => {
         </tbody>
       </table>
     </div>
-  );
-};
-export default Sadnica;
+  )
+}
+export default Sadnica

@@ -1,96 +1,121 @@
-import React, { useEffect, useState } from "react";
-import Navigacija from "../Components/Navigacija";
+import React, { useEffect, useState } from 'react'
+import Navigacija from '../Components/Navigacija'
 
 const OrderHistory = (props) => {
-  const userInfoLoad = JSON.parse(localStorage.getItem("userInfo" || "[]"));
+  const userInfoLoad = JSON.parse(localStorage.getItem('userInfo' || '[]'))
 
-  const [userInfo, setUserInfo] = useState(userInfoLoad);
+  const [userInfo, setUserInfo] = useState(userInfoLoad)
 
-  let [dataSadnice, setDataSadnice] = useState({});
-  let [dataUsluge, setDataUsluge] = useState({});
+  let [dataSadnice, setDataSadnice] = useState({})
+  let [dataUsluge, setDataUsluge] = useState({})
 
   useEffect(() => {
-    fetch("http://localhost:5000/sadnica_korisnik", {
-      method: "GET",
+    fetch('http://localhost:5000/sadnica_korisnik', {
+      method: 'GET',
       headers: new Headers({
-        "Access-Control-Allow-Origin": "null",
-        "x-access-token": userInfo.token,
+        'Access-Control-Allow-Origin': 'null',
+        'x-access-token': userInfo.token,
       }),
-      mode: "cors",
+      mode: 'cors',
     })
       .then((response) => {
-        return response.json();
+        return response.json()
       })
-      .then((json) => setDataSadnice(json));
-  }, [userInfo.token]);
+      .then((json) => setDataSadnice(json))
+  }, [userInfo.token])
   useEffect(() => {
-    fetch("http://localhost:5000/usluga_korisnik", {
-      method: "GET",
+    fetch('http://localhost:5000/usluga_korisnik', {
+      method: 'GET',
       headers: new Headers({
-        "Access-Control-Allow-Origin": "null",
-        "x-access-token": userInfo.token,
+        'Access-Control-Allow-Origin': 'null',
+        'x-access-token': userInfo.token,
       }),
-      mode: "cors",
+      mode: 'cors',
     })
       .then((response) => {
-        return response.json();
+        return response.json()
       })
-      .then((json) => setDataUsluge(json));
-  }, [userInfo.token]);
+      .then((json) => setDataUsluge(json))
+  }, [userInfo.token])
 
   return (
-    <div className="App povijest">
-      <div className="opacity">
+    <div className='App povijest'>
+      <div className='opacity'>
         <Navigacija></Navigacija>
       </div>
-
-      <h1>Povijest narudžbi</h1>
-      <h2>Sadnice</h2>
-      <table className="table">
-        {dataSadnice.Sadnice !== undefined
-          ? dataSadnice.Sadnice.map((order) => (
-              <tbody key={order.id}>
-                <div id={order.id}>
-                  <tr className="long">
-                    <th>Naziv</th>
-                    <td>{order.sadnica}</td>
-                  </tr>
-
-                  <tr>
-                    <th>Cijena</th>
-                    <td>{order.cijena} €</td>
-                  </tr>
-                  <tr className="long">
-                    <th>Količina</th>
-                    <td>{order.broj}</td>
-                  </tr>
-                </div>
+      <div className='block opacity1'>
+        <h1>Povijest narudžbi</h1>
+        {dataSadnice.Sadnice !== undefined ? (
+          <div>
+            <h2>Sadnice</h2>
+            <table className='table'>
+              <tbody>
+                <tr>
+                  <th>Naziv</th>
+                  <th>Cijena</th>
+                  <th>Količina</th>
+                </tr>
               </tbody>
-            ))
-          : null}
-      </table>
-      <h2>Usluge</h2>
-      <table className="table">
-        {dataUsluge.Usluge !== undefined
-          ? dataUsluge.Usluge.map((order) => (
-              <tbody key={order.id}>
-                <div id={order.id}>
-                  <tr className="long">
-                    <th>Naziv</th>
-                    <td>{order.usluga}</td>
-                  </tr>
+              {dataSadnice.Sadnice !== undefined
+                ? dataSadnice.Sadnice.map((order) => (
+                    <tbody key={order.id}>
+                      <>
+                        <tr className='long'>
+                          <td className='height'>
+                            {/* <img
+                              className='size'
+                              src={order.slika}
+                              alt={order.naziv}
+                            /> */}
+                            {order.sadnica}
+                          </td>
 
-                  <tr>
-                    <th>Cijena</th>
-                    <td>{order.cijena} €</td>
-                  </tr>
-                </div>
+                          <td className='height'>
+                            {order.cijena * order.broj} €
+                          </td>
+                          <td className='height'>{order.broj}</td>
+                        </tr>
+                      </>
+                    </tbody>
+                  ))
+                : null}
+            </table>
+          </div>
+        ) : null}
+
+        {dataUsluge.Usluge !== undefined ? (
+          <div>
+            <h2>Usluge</h2>
+            <table className='table'>
+              <tbody>
+                <tr>
+                  <th>Naziv</th>
+                  <th>Cijena</th>
+                </tr>
               </tbody>
-            ))
-          : null}
-      </table>
+              {dataUsluge.Usluge !== undefined
+                ? dataUsluge.Usluge.map((order) => (
+                    <tbody key={order.id}>
+                      <tr className='long '>
+                        <td className='height'>
+                          {/* <img
+                            className='size'
+                            src={order.slika}
+                            alt={order.naziv}
+                          /> */}
+                          {order.usluga}
+                        </td>
+                        <td className='height'>{order.cijena} €</td>
+                      </tr>
+                    </tbody>
+                  ))
+                : null}
+            </table>
+          </div>
+        ) : null}
+      </div>
     </div>
-  );
-};
+  )
+}
 
-export default OrderHistory;
+export default OrderHistory

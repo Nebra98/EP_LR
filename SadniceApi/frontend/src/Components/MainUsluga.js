@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from "react";
-import Usluga from "./Usluga";
+import React, { useEffect, useState } from 'react'
+import Usluga from './Usluga'
 
 const MainUsluga = (props) => {
-  let [data, setData] = useState();
+  let [data, setData] = useState()
   useEffect(() => {
-    fetch("http://localhost:5000/usluga", {
-      method: "GET",
+    fetch('http://localhost:5000/usluga', {
+      method: 'GET',
       headers: {
-        "Access-Control-Allow-Origin": "null",
+        'Access-Control-Allow-Origin': 'null',
       },
-      mode: "cors",
+      mode: 'cors',
     })
       .then((response) => {
-        return response.json();
+        return response.json()
       })
-      .then((json) => setData(json));
-  }, []);
+      .then((json) => setData(json))
+  }, [])
 
-  const { searchName, onAdd } = props;
+  const { searchName, onAdd } = props
 
   return (
-    <main className="block col-2">
-      <h2>Products</h2>
-      <div className="row">
+    <main className='block col-2'>
+      <h2>Usluge</h2>
+      <div className='row'>
         <Usluga searchName={searchName} onAdd={onAdd} product={data}></Usluga>
       </div>
     </main>
-  );
-};
+  )
+}
 
-export default MainUsluga;
+export default MainUsluga
